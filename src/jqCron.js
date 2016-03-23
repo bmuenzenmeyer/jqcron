@@ -159,11 +159,12 @@ var jqCronDefaultSettings = {
 		var _$blockDOM    = $('<span class="jqCron-dom"></span>');
 		var _$blockMONTH  = $('<span class="jqCron-month"></span>');
 		var _$blockMINS   = $('<span class="jqCron-mins"></span>');
+		var _$blockOCCUR  = $('<span class="jqCron-occur"></span>');
 		var _$blockDOW    = $('<span class="jqCron-dow"></span>');
 		var _$blockTIME   = $('<span class="jqCron-time"></span>');
 		var _$cross       = $('<span class="jqCron-cross">&#10008;</span>');
 		var _selectors    = [];
-		var _selectorPeriod, _selectorMins, _selectorTimeH, _selectorTimeM, _selectorDow, _selectorDom, _selectorMonth;
+		var _selectorPeriod, _selectorMins, _selectorTimeH, _selectorTimeM, _selectorDow, _selectorDom, _selectorMonth, _selectorOccur;
 
 		// instanciate a new selector
 		function newSelector($block, multiple, type){
@@ -287,7 +288,17 @@ var jqCronDefaultSettings = {
 					_selectorMins.setCronValue(items[1]);
 					_selectorTimeM.setCronValue(items[1]);
 					_selectorTimeH.setCronValue(items[2]);
-					_selectorDow.setCronValue(items[5]);
+						//allow for #L in Day of Week
+					if (items[5].substring(1, items[5].length) == 'L'){
+						_selectorPeriod.setValue('month');
+						_$blockDOM.hide();
+						_$blockDOW.show();
+						_selectorDow.setCronValue(items[5].substring(0, 1));
+						_selectorOccur.setCronValue("7"); //Last occurance
+					}
+					else {
+						_selectorDow.setCronValue(items[5]);
+					}
 				}
 				else if (mask.substring(4, mask.length) == '-?') {			// 8 possibilities
 					_selectorPeriod.setValue('year');
@@ -301,7 +312,9 @@ var jqCronDefaultSettings = {
 					_self.error(_self.getText('error4'));
 				}
 				_self.clearError();
-			} catch(e) {}
+			} catch(e) {
+				console.log(e);
+			}
 		};
 
 		// close all child selectors
@@ -382,6 +395,7 @@ var jqCronDefaultSettings = {
 			settings.no_reset_button || _$obj.append(_$cross);
 			(!settings.disable) || _$obj.addClass('disable');
 			_$blocks.append(_$blockPERIOD);
+			_$blocks.append(_$blockOCCUR);
 			_$blocks.append(_$blockDOM);
 			_$blocks.append(_$blockMONTH);
 			_$blocks.append(_$blockMINS);
@@ -415,6 +429,7 @@ var jqCronDefaultSettings = {
 				_$blockMINS.hide();
 				_$blockDOW.hide();
 				_$blockTIME.hide();
+				_$blockOCCUR.hide();
 				if(value == 'hour') {
 					_$blockMINS.show();
 				}
@@ -422,10 +437,12 @@ var jqCronDefaultSettings = {
 					_$blockTIME.show();
 				}
 				else if(value == 'week') {
+					_$blockOCCUR.show();
 					_$blockDOW.show();
-					_$blockTIME.show();
+					_$blockTIME.show();					
 				}
 				else if(value == 'month') {
+					_$blockOCCUR.show();
 					_$blockDOM.show();
 					_$blockTIME.show();
 				}
@@ -453,6 +470,13 @@ var jqCronDefaultSettings = {
 			_selectorTimeM = newSelector(_$blockTIME, settings.multiple_time_minutes, 'time_minutes');
 			for(i=0, list=settings.minutes; i<list.length; i++){
 				_selectorTimeM.add(list[i], list[i]);
+			}
+
+			// OCCUR (specific occurance)
+			_$blockOCCUR.append(_self.getText('text_occur'));
+			_selectorOccur = newSelector(_$blockOCCUR, false, 'occurance');
+			for(i=0, list=_self.getText('occurance'); i<list.length; i++){
+				_selectorOccur.add(i+1, list[i]);
 			}
 
 			// DOW  (day of week)

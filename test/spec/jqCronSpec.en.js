@@ -66,7 +66,7 @@ describe("#Player", function() {
 
     it("should translate last friday of month schedule correctly", function () {
         var cronExp = "0 15 10 ? * 6L";
-        var cronHumanTextInEnglish = "Last Saturday of every month at 10:15";
+        var cronHumanTextInEnglish = "Every month on the last saturday at 10:15";
 
         $('#cronexp').jqCronGetInstance().setCron(cronExp);
 
