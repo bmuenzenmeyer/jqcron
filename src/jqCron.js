@@ -281,14 +281,23 @@ var jqCronDefaultSettings = {
 					_selectorMins.setCronValue(items[1]);
 					_selectorTimeM.setCronValue(items[1]);
 					_selectorTimeH.setCronValue(items[2]);
-					_selectorDom.setCronValue(items[3]);
+					if (items[3] == 'L'){
+						_selectorOccur.setCronValue("7"); //Last occurance
+					}
+					else{
+						if (items[2] != '*'){
+							_$blockOCCUR.hide();
+						}
+						
+						_selectorDom.setCronValue(items[3]);
+					}
 				}
 				else if(mask.substring(3, mask.length) == '?*-') {			// 4 possibilities
 					_selectorPeriod.setValue('week');
 					_selectorMins.setCronValue(items[1]);
 					_selectorTimeM.setCronValue(items[1]);
 					_selectorTimeH.setCronValue(items[2]);
-						//allow for #L in Day of Week
+					//allow for #L in Day of Week
 					if (items[5].substring(1, items[5].length) == 'L'){
 						_selectorPeriod.setValue('month');
 						_$blockDOM.hide();
@@ -297,6 +306,9 @@ var jqCronDefaultSettings = {
 						_selectorOccur.setCronValue("7"); //Last occurance
 					}
 					else {
+						if (items[5].includes('-') || items[5].includes(',')){
+							_$blockOCCUR.hide();							
+						}
 						_selectorDow.setCronValue(items[5]);
 					}
 				}
