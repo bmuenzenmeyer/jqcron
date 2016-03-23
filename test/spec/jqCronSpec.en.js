@@ -82,4 +82,13 @@ describe("#Player", function() {
         expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);
     });
 
+    it("should translate last day of month schedule correctly", function () {
+        var cronExp = "0 15 10 ? * 6#3";
+        var cronHumanTextInEnglish = "Every month on the third saturday of the month at 10:15";
+
+        $('#cronexp').jqCronGetInstance().setCron(cronExp);
+
+        expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);
+    });
+
 });
