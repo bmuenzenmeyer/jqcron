@@ -82,7 +82,7 @@ describe("#Player", function() {
         expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);
     });
 
-    it("should translate last day of month schedule correctly", function () {
+    it("should translate the specific day occurance of month schedule correctly", function () {
         var cronExp = "0 15 10 ? * 6#3";
         var cronHumanTextInEnglish = "Every month on the third saturday of the month at 10:15";
 
