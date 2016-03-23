@@ -159,12 +159,12 @@ var jqCronDefaultSettings = {
 		var _$blockDOM    = $('<span class="jqCron-dom"></span>');
 		var _$blockMONTH  = $('<span class="jqCron-month"></span>');
 		var _$blockMINS   = $('<span class="jqCron-mins"></span>');
-		var _$blockOCCUR  = $('<span class="jqCron-occur"></span>');
 		var _$blockDOW    = $('<span class="jqCron-dow"></span>');
 		var _$blockTIME   = $('<span class="jqCron-time"></span>');
 		var _$cross       = $('<span class="jqCron-cross">&#10008;</span>');
+		var _$blockOccurDOW, _$blockOccurDOM;
 		var _selectors    = [];
-		var _selectorPeriod, _selectorMins, _selectorTimeH, _selectorTimeM, _selectorDow, _selectorDom, _selectorMonth, _selectorOccur;
+		var _selectorPeriod, _selectorMins, _selectorTimeH, _selectorTimeM, _selectorDow, _selectorDom, _selectorMonth,  _selectorOccurDOW, _selectorOccurDOM;
 
 		// instanciate a new selector
 		function newSelector($block, multiple, type){
@@ -282,13 +282,10 @@ var jqCronDefaultSettings = {
 					_selectorTimeM.setCronValue(items[1]);
 					_selectorTimeH.setCronValue(items[2]);
 					if (items[3] == 'L'){
-						_selectorOccur.setCronValue("7"); //Last occurance
+						_selectorOccurDOM.setCronValue("7"); //Last occurance
 					}
 					else{
-						if (items[2] != '*'){
-							_$blockOCCUR.hide();
-						}
-						
+						$('.jqCron-dom > .jqCron-selector-1').hide();
 						_selectorDom.setCronValue(items[3]);
 					}
 				}
@@ -303,12 +300,13 @@ var jqCronDefaultSettings = {
 						_$blockDOM.hide();
 						_$blockDOW.show();
 						_selectorDow.setCronValue(items[5].substring(0, 1));
-						_selectorOccur.setCronValue("7"); //Last occurance
+						_selectorOccurDOW.setCronValue("7"); //Last occurance
 					}
 					else {
 						if (items[5].includes('-') || items[5].includes(',')){
-							_$blockOCCUR.hide();							
-						}
+							$('.jqCron-dow > .jqCron-selector-1').hide();
+						}						
+
 						_selectorDow.setCronValue(items[5]);
 					}
 				}
@@ -317,7 +315,11 @@ var jqCronDefaultSettings = {
 					_selectorMins.setCronValue(items[1]);
 					_selectorTimeM.setCronValue(items[1]);
 					_selectorTimeH.setCronValue(items[2]);
+					if (items[3] != 'L'){
+						$('.jqCron-dom > .jqCron-selector-1').hide();						
+					}
 					_selectorDom.setCronValue(items[3]);
+					
 					_selectorMonth.setCronValue(items[4]);
 				}
 				else {
@@ -356,7 +358,7 @@ var jqCronDefaultSettings = {
 		    var texts=[];
 		    _$obj
 		    .find('> span > span:visible')
-		    .find('.jqCron-text, .jqCron-selector > span')
+		    .find('.jqCron-text, .jqCron-selector:visible > span')
 		    .each(function() {
 		        var text = $(this).text().replace(/\s+$/g, '').replace(/^\s+/g, '');
 		        text && texts.push(text);
@@ -407,7 +409,6 @@ var jqCronDefaultSettings = {
 			settings.no_reset_button || _$obj.append(_$cross);
 			(!settings.disable) || _$obj.addClass('disable');
 			_$blocks.append(_$blockPERIOD);
-			_$blocks.append(_$blockOCCUR);
 			_$blocks.append(_$blockDOM);
 			_$blocks.append(_$blockMONTH);
 			_$blocks.append(_$blockMINS);
@@ -441,7 +442,8 @@ var jqCronDefaultSettings = {
 				_$blockMINS.hide();
 				_$blockDOW.hide();
 				_$blockTIME.hide();
-				_$blockOCCUR.hide();
+				$('.jqCron-dow > .jqCron-selector-1').show();
+				$('.jqCron-dom > .jqCron-selector-1').show();	
 				if(value == 'hour') {
 					_$blockMINS.show();
 				}
@@ -449,12 +451,10 @@ var jqCronDefaultSettings = {
 					_$blockTIME.show();
 				}
 				else if(value == 'week') {
-					_$blockOCCUR.show();
 					_$blockDOW.show();
 					_$blockTIME.show();					
 				}
 				else if(value == 'month') {
-					_$blockOCCUR.show();
 					_$blockDOM.show();
 					_$blockTIME.show();
 				}
@@ -484,15 +484,12 @@ var jqCronDefaultSettings = {
 				_selectorTimeM.add(list[i], list[i]);
 			}
 
-			// OCCUR (specific occurance)
-			_$blockOCCUR.append(_self.getText('text_occur'));
-			_selectorOccur = newSelector(_$blockOCCUR, false, 'occurance');
-			for(i=0, list=_self.getText('occurance'); i<list.length; i++){
-				_selectorOccur.add(i+1, list[i]);
-			}
-
 			// DOW  (day of week)
 			_$blockDOW.append(_self.getText('text_dow'));
+			_selectorOccurDOW = newSelector(_$blockDOW, false, 'occurance');
+			for(i=0, list=_self.getText('occurance'); i<list.length; i++){
+				_selectorOccurDOW.add(i+1, list[i]);
+			}
 			_selectorDow = newSelector(_$blockDOW, settings.multiple_dow, 'day_of_week');
 			for(i=0, list=_self.getText('weekdays'); i<list.length; i++){
 				_selectorDow.add(i+1, list[i]);
@@ -500,6 +497,10 @@ var jqCronDefaultSettings = {
 
 			// DOM  (day of month)
 			_$blockDOM.append(_self.getText('text_dom'));
+			_selectorOccurDOM = newSelector(_$blockDOM, false, 'occurance');
+			for(i=0, list=_self.getText('occurance'); i<list.length; i++){
+				_selectorOccurDOM.add(i+1, list[i]);
+			}
 			_selectorDom = newSelector(_$blockDOM, settings.multiple_dom, 'day_of_month');
 			for(i=0, list=settings.monthdays; i<list.length; i++){
 				_selectorDom.add(list[i], list[i]);
