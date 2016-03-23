@@ -73,4 +73,13 @@ describe("#Player", function() {
         expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);
     });
 
+    it("should translate last day of month schedule correctly", function () {
+        var cronExp = "0 15 10 L * ?";
+        var cronHumanTextInEnglish = "Every month on the last day of the month at 10:15";
+
+        $('#cronexp').jqCronGetInstance().setCron(cronExp);
+
+        expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);
+    });
+
 });
