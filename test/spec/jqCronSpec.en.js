@@ -18,6 +18,10 @@ describe("#Player", function() {
         });
     });
 
+    afterEach(function() {
+      $('#cronexp').jqCronGetInstance().clear();
+    });
+
     it("should translate every hour schedule correctly", function () {
         var cronExp = "0 43 * * * ?";
         var cronHumanTextInEnglish = "Every hour at 43 minute(s) past the hour";
