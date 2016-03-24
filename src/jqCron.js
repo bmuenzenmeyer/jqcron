@@ -232,26 +232,36 @@ var jqCronDefaultSettings = {
 		// get cron value
 		this.getCron = function(){
 			var period = _selectorPeriod.getValue();
-			var items = ['0', '*', '*', '*', '*', '*'];
-			if(period == 'minute') {
-				items[5] = '?';
-			}
+			var items = ['0', '*', '*', '*', '*', '?'];
 			if(period == 'hour') {
 				items[1] = _selectorMins.getCronValue();
-				items[5] = '?';
 			}
 			if(period == 'day' || period == 'week' || period == 'month' || period == 'year') {
 				items[1] = _selectorTimeM.getCronValue();
 				items[2] = _selectorTimeH.getCronValue();
-				items[5] = '?';
 			}
 			if(period == 'month' || period == 'year') {
-				items[3] = _selectorDom.getCronValue();
-				items[5] = '?';
+				if (_selectorOccurDOW.getCronValue() != '*'){
+					if (_selectorOccurDOW.getValue() == '7'){
+						if (_selectorDow.getCronValue() == '*'){
+							items[3] = 'L';
+						}
+						else{
+							items[3] = '?';
+							items[5] = _selectorDow.getCronValue() + 'L'; 
+						}
+					}
+					else{
+						items[3] = '?';
+						items[5] = _selectorDow.getCronValue() + "#" + (parseInt(_selectorOccurDOW.getValue()) - 1);
+					}
+				}
+				else{
+					items[3] = _selectorDom.getCronValue();
+				}
 			}
 			if(period == 'year') {
 				items[4] = _selectorMonth.getCronValue();
-				items[5] = '?';
 			}
 			if(period == 'week') {
 				items[3] = '?';
