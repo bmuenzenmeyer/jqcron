@@ -410,6 +410,8 @@ var jqCronDefaultSettings = {
 			_selectorMonth.setValue([]);
 			_selectorTimeH.setValue([]);
 			_selectorTimeM.setValue([]);
+			_selectorOccurDOW.setValue([]);
+			_selectorOccurDOM.setValue([]);
 			_self.triggerChange();
 		};
 
