@@ -311,6 +311,16 @@ var jqCronDefaultSettings = {
 						_selectorDow.setCronValue(items[5].substring(0, 1));
 						_selectorOccurDOW.setCronValue("7"); //Last occurance
 					}
+					else if (items[5].includes('#') && items[5].length == 3){
+						var occuranceVal = parseInt(items[5].substring(2, items[5].length)) + 1 + "",
+							dowVal = items[5].substring(0, 1);
+
+						_selectorPeriod.setValue('month');
+						_$blockDOM.hide();
+						_$blockDOW.show();
+						_selectorOccurDOW.setCronValue(occuranceVal);
+						_selectorDow.setCronValue(dowVal);
+					}
 					else {
 						if (items[5].includes('-') || items[5].includes(',')){
 							$('.jqCron-dow > .jqCron-selector-1').hide();
