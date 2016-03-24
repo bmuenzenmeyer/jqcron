@@ -198,6 +198,12 @@ var jqCronDefaultSettings = {
 						boundChanged = _selectorMins.setValue(_selectorTimeM.getValue());
 					}
 				}
+				if(selector == _selectorOccurDOM){
+					boundChanged = _selectorOccurDOW.setValue(_selectorOccurDOM.getValue());
+				}
+				else if (selector == _selectorOccurDOW){
+					boundChanged = _selectorOccurDOM.setValue(_selectorOccurDOW.getValue());
+				}
 				// we propagate the change event to the main object
 				boundChanged || _$obj.trigger('cron:change', _self.getCron());
 			});
@@ -278,10 +284,13 @@ var jqCronDefaultSettings = {
 				}
 				else if(mask.substring(3, mask.length) == '-*?') {			// 4 possibilities
 					_selectorPeriod.setValue('month');
+					_$blockDOW.hide();
+					_$blockDOM.show();
 					_selectorMins.setCronValue(items[1]);
 					_selectorTimeM.setCronValue(items[1]);
 					_selectorTimeH.setCronValue(items[2]);
 					if (items[3] == 'L'){
+						_selectorDom.setCronValue("*");
 						_selectorOccurDOM.setCronValue("7"); //Last occurance
 					}
 					else{
