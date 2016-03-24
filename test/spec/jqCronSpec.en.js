@@ -88,7 +88,7 @@ describe("#Player", function() {
 
     it("should translate the specific day occurance of month schedule correctly", function () {
         var cronExp = "0 15 10 ? * 6#3";
-        var cronHumanTextInEnglish = "Every month on the third saturday of the month at 10:15";
+        var cronHumanTextInEnglish = "Every month on the third saturday at 10:15";
 
         $('#cronexp').jqCronGetInstance().setCron(cronExp);
 
