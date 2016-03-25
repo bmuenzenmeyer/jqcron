@@ -251,9 +251,17 @@ var jqCronDefaultSettings = {
 							items[5] = _selectorDow.getCronValue() + 'L'; 
 						}
 					}
-					else{
-						items[3] = '?';
-						items[5] = _selectorDow.getCronValue() + "#" + (parseInt(_selectorOccurDOW.getValue()) - 1);
+					else{						
+						if (_selectorOccurDOW.getCronValue() == '1'){
+							_$blockDOM.show();
+							_$blockDOW.hide();
+						}
+						else{
+							_$blockDOM.hide();
+							_$blockDOW.show();
+						}
+							items[3] = '?';
+							items[5] = _selectorDow.getCronValue() + "#" + (parseInt(_selectorOccurDOW.getValue()) - 1);
 					}
 				}
 				else{
