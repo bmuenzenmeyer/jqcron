@@ -1,28 +1,138 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>Jasmine Spec Runner for jqCron lib</title>
+	<head>
+		<meta charset="utf-8" />
+		<title>Jasmine Spec Runner for jqCron lib</title>
 
-  <link rel="shortcut icon" type="image/png" href="lib/jasmine-2.4.1/jasmine_favicon.png">
-  <link rel="stylesheet" href="lib/jasmine-2.4.1/jasmine.css">
-  <link rel="stylesheet" type="text/css" href="../src/jqCron.css"/>
+		<link rel="shortcut icon" type="image/png" href="lib/jasmine-2.4.1/jasmine_favicon.png" />
+		<link rel="stylesheet" href="lib/jasmine-2.4.1/jasmine.css" />
+		<link rel="stylesheet" type="text/css" href="../src/jqCron.css"/>
 
-  <script src="lib/jquery-1.7.2.min.js"></script>
-  <script src="lib/jasmine-2.4.1/jasmine.js"></script>
-  <script src="lib/jasmine-2.4.1/jasmine-html.js"></script>
-  <script src="lib/jasmine-2.4.1/boot.js"></script>
+        
+		<script src="lib/jquery-1.7.2.min.js"></script>
+    <!--
+		<script src="lib/jasmine-2.4.1/jasmine.js" ></script>
+		<script src="lib/jasmine-2.4.1/jasmine-html.js" ></script>
+		<script src="lib/jasmine-2.4.1/boot.js" ></script>
+            -->
+		<!-- source files -->
+        <!--<script src="../src/jqCron.js"></script>-->
+        <script src="../src/jqCronNew.js"></script>
+        <!--<script src="../src/jqCron.en.js"></script>-->
 
-  <!-- source files -->
-  <script src="../src/jqCron.js"></script>
-  <script src="../src/jqCron.en.js"></script>
+		<!-- Spec file -->
+        <!--<script src="spec/jqCronSpec.en.js"></script>-->
+	</head>
+	<body>
+		<div id="cronexp"/>
 
-  <!-- Spec file -->
-  <script src="spec/jqCronSpec.en.js"></script>
+		<div id="Schedule">
+            <span>
+                <div><input type="radio" value="daily" name="ScheduleType"/>Daily</div>
+                <div><input type="radio" value="weekly" name="ScheduleType"/>Weekly</div>
+                <div><input type="radio" value="monthly" name="ScheduleType"/>Monthly</div>
+                <div><input type="radio" value="yearly" name="ScheduleType"/>Yearly</div>
+            </span>
+            <br/><br/>
+            <span>
+                <div id="dailyOptions">
+                        <div><input type="radio" value="daily" name="dailyPattern" />Every <input name="dayFrequency" /> days(s)</div>
+                        <div><input type="radio" value="weekday" name="dailyPattern" />Every weekday</div>
+                </div>
+                <div id="weeklyOptions">
+                    <div>
+                        Recur every <input name="weekFrequency" /> week(s) on:<br/>
+                        <span><input type="checkbox" value="1" name="weeklyDays" />Sunday</span>
+                        <span><input type="checkbox" value="2" name="weeklyDays" />Monday</span>
+                        <span><input type="checkbox" value="3" name="weeklyDays" />Tuesday</span>
+                        <span><input type="checkbox" value="4" name="weeklyDays" />Wednesday</span>
+                        <span><input type="checkbox" value="5" name="weeklyDays" />Thursday</span>
+                        <span><input type="checkbox" value="6" name="weeklyDays" />Friday</span>
+                        <span><input type="checkbox" value="7" name="weeklyDays" />Saturday</span>
+                    </div>
+                </div>
+                <div id="monthlyOptions">
+                    <div><input type="radio" value="date" name="monthlyPattern" />Day <input name="date" /> of every <input name="monthFrequency"/> month(s)<br/></div>
+                    <div><input type="radio" value="week" name="monthlyPattern" />The 
+                        <select name="weekOccurrence">
+                            <option value="#1">First</option>
+                            <option value="#2">Second</option>
+                            <option value="#3">Third</option>
+                            <option value="#4">Fourth</option>
+                            <option value="#5">Fifth</option>
+                            <option value="L">Last</option>
+                        </select>
+                        <select name="dayOfWeek">
+                            <option value="1">Sunday</option>
+                            <option value="2">Monday</option>
+                            <option value="3">Tuesday</option>
+                            <option value="4">Wednesday</option>
+                            <option value="5">Thursday</option>
+                            <option value="6">Friday</option>
+                            <option value="7">Saturday</option>
+                        </select> of every <input name="monthFrequency" /> month(s).
+                    </div>
+                </div>
+                <div id="yearlyOptions">
+                    <div>Recur every <input name="yearFrequency" /> year(s)</div>
+                    <div><input type="radio" name="yearPattern" value="specificDay"/>On: 
+                        <select multiple name="month">
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                        <input name="dayOfMonth" />
+                    </div>
+                    <div>
+                        <input type="radio" name="yearPattern" value="weekOccurrence" />On the:
+                        <select name="weekOccurrence">
+                            <option value="#1">First</option>
+                            <option value="#2">Second</option>
+                            <option value="#3">Third</option>
+                            <option value="#4">Fourth</option>
+                            <option value="#5">Fifth</option>
+                            <option value="L">Last</option>
+                        </select>
+                        <select name="dayOfWeek">
+                            <option value="1">Sunday</option>
+                            <option value="2">Monday</option>
+                            <option value="3">Tuesday</option>
+                            <option value="4">Wednesday</option>
+                            <option value="5">Thursday</option>
+                            <option value="6">Friday</option>
+                            <option value="7">Saturday</option>
+                        </select> of
+                        <select multiple name="month">
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                </div>
+            </span>
+        </div>
+        <br/>
+        <br/>
+        <br/>
 
-</head>
+	</body>
 
-<body>
-<div id="cronexp"></div>
-</body>
 </html>
