@@ -219,7 +219,7 @@ describe("JQCron", function(){
             var cronHumanTextInEnglish = "Every month on the second sunday at 14:25";
 
             $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "the second"; }).click();
+            $('.jqCron-dom > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "the second"; }).click();
             $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "sunday"; }).click();
             $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "14"; }).click();
             $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "25"; }).click();
