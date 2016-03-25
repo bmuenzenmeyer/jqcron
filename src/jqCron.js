@@ -245,8 +245,12 @@ var jqCronDefaultSettings = {
 					if (_selectorOccurDOW.getValue() == '7'){
 						if (_selectorDow.getCronValue() == '*'){
 							items[3] = 'L';
+							_$blockDOM.show();
+							_$blockDOW.hide();
 						}
 						else{
+							_$blockDOM.hide();
+							_$blockDOW.show();
 							items[3] = '?';
 							items[5] = _selectorDow.getCronValue() + 'L'; 
 						}
@@ -260,12 +264,21 @@ var jqCronDefaultSettings = {
 							_$blockDOM.hide();
 							_$blockDOW.show();
 						}
-							items[3] = '?';
-							items[5] = _selectorDow.getCronValue() + "#" + (parseInt(_selectorOccurDOW.getValue()) - 1);
+						items[3] = '?';
+						items[5] = _selectorDow.getCronValue() + "#" + (parseInt(_selectorOccurDOW.getValue()) - 1);
 					}
 				}
 				else{
+					_$blockDOM.show();
+					_$blockDOW.hide();
 					items[3] = _selectorDom.getCronValue();
+					var domOcc = $('.jqCron-dom > .jqCron-selector-1');
+					if (items[3] != '*'){
+						domOcc.hide();						
+					}
+					else{
+						domOcc.show();
+					}
 				}
 			}
 			if(period == 'year') {
