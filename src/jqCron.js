@@ -266,6 +266,13 @@ var jqCronDefaultSettings = {
 			if(period == 'week') {
 				items[3] = '?';
 				items[5] = _selectorDow.getCronValue();
+				var dowOcc = $('.jqCron-dow > .jqCron-selector-1');
+				if (items[5] != '*'){
+					dowOcc.hide();
+				}
+				else{
+					dowOcc.show();
+				}
 			}
 			return items.join(' ');
 		};
