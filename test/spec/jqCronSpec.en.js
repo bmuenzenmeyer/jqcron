@@ -1,5 +1,18 @@
 describe("JQCron", function(){
 
+    var clickValue = function(selector, value){
+        selector.filter(function(a) { return $(this).text() === value; }).click();
+    },
+    periodSelector,
+    timeMinuteSelector,
+    timeHourSelector,
+    minuteSelector,
+    dayOfWeekOccurrenceSelector,
+    dayOfWeekSelector,
+    dayOfMonthOccurrenceSelector,
+    dayOfMonthSelector,
+    monthSelector;
+
     beforeAll(function() {   
         $(function () {
             $('#cronexp').jqCron({
@@ -16,6 +29,16 @@ describe("JQCron", function(){
                 lang: 'en',
                 numeric_zero_pad: true
             });
+
+            periodSelector                  = $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li');
+            timeHourSelector                = $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li');
+            timeMinuteSelector              = $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li');
+            minuteSelector                  = $('.jqCron-mins > .jqCron-selector > .jqCron-selector-list > li');
+            dayOfWeekOccurrenceSelector     = $('.jqCron-dow > .jqCron-selector-1 > .jqCron-selector-list > li');
+            dayOfWeekSelector               = $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li');
+            dayOfMonthOccurrenceSelector    = $('.jqCron-dom > .jqCron-selector-1 > .jqCron-selector-list > li');
+            dayOfMonthSelector              = $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li');
+            monthSelector                   = $('.jqCron-month > .jqCron-selector > .jqCron-selector-list > li');
         });     
     });
 
@@ -106,8 +129,9 @@ describe("JQCron", function(){
         it ("for a specific hour correctly", function(){
             var cronExp = "0 43 * * * ?";
 
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "hour"; }).click();        
-            $('.jqCron-mins > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "43"; }).click();        
+            clickValue(periodSelector, "hour");
+
+            clickValue(minuteSelector, "43");        
 
             expect($('#cronexp').jqCronGetInstance().getCron()).toEqual(cronExp);        
         })
@@ -115,11 +139,11 @@ describe("JQCron", function(){
         it("for every day", function () {
             var cronExp = "0 20 5,7,10 * * ?";
 
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "day"; }).click();        
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "05"; }).click();        
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "07"; }).click();        
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "10"; }).click(); 
-            $('.jqCron-mins > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "20"; }).click();
+            clickValue(periodSelector, "day");        
+            clickValue(timeHourSelector, "05");        
+            clickValue(timeHourSelector, "07");        
+            clickValue(timeHourSelector, "10"); 
+            clickValue(minuteSelector, "20");
 
             expect($('#cronexp').jqCronGetInstance().getCron()).toEqual(cronExp);    
         });
@@ -127,14 +151,14 @@ describe("JQCron", function(){
         it("for every week", function () {
             var cronExp = "0 20 10 ? * 1-5";
             
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "week"; }).click();
-            $('.jqCron-mins > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "20"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "10"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "monday"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "tuesday"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "wednesday"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "thursday"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "friday"; }).click();
+            clickValue(periodSelector, "week");
+            clickValue(minuteSelector, "20");
+            clickValue(timeHourSelector, "10");
+            clickValue(dayOfWeekSelector, "monday");
+            clickValue(dayOfWeekSelector, "tuesday");
+            clickValue(dayOfWeekSelector, "wednesday");
+            clickValue(dayOfWeekSelector, "thursday");
+            clickValue(dayOfWeekSelector, "friday");
 
 
             expect($('#cronexp').jqCronGetInstance().getCron()).toEqual(cronExp);    
@@ -143,11 +167,11 @@ describe("JQCron", function(){
         it("for every month", function () {
             var cronExp = "0 52 8-9 26 * ?";
             
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
-            $('.jqCron-mins > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "52"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "08"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "09"; }).click();
-            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "26"; }).click();
+            clickValue(periodSelector, "month");
+            clickValue(minuteSelector, "52");
+            clickValue(timeHourSelector, "08");
+            clickValue(timeHourSelector, "09");
+            clickValue(dayOfMonthSelector, "26");
 
 
             expect($('#cronexp').jqCronGetInstance().getCron()).toEqual(cronExp);
@@ -156,11 +180,11 @@ describe("JQCron", function(){
         it("for every year", function () {
             var cronExp = "0 34 21 3 5 ?";
             
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "year"; }).click();
-            $('.jqCron-mins > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "34"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "21"; }).click();
-            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "03"; }).click();
-            $('.jqCron-month > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "may"; }).click();
+            clickValue(periodSelector, "year");
+            clickValue(minuteSelector, "34");
+            clickValue(timeHourSelector, "21");
+            clickValue(dayOfMonthSelector, "03");
+            clickValue(monthSelector, "may");
 
 
             expect($('#cronexp').jqCronGetInstance().getCron()).toEqual(cronExp);
@@ -169,11 +193,11 @@ describe("JQCron", function(){
         it("for the last saturday of month", function () {
             var cronExp = "0 15 10 ? * 6L";
             
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
-            $('.jqCron-dom > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "the last"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "saturday"; }).click();
-            $('.jqCron-mins > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "15"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "10"; }).click();
+            clickValue(periodSelector, "month");
+            clickValue(dayOfMonthOccurrenceSelector, "the last");
+            clickValue(dayOfWeekSelector, "saturday");
+            clickValue(minuteSelector, "15");
+            clickValue(timeHourSelector, "10");
 
             expect($('#cronexp').jqCronGetInstance().getCron()).toEqual(cronExp);
         });
@@ -181,10 +205,10 @@ describe("JQCron", function(){
         it("for the last day of a month", function () {
             var cronExp = "0 15 10 L * ?";
             
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
-            $('.jqCron-dom > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "the last"; }).click();
-            $('.jqCron-mins > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "15"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "10"; }).click();
+            clickValue(periodSelector, "month");
+            clickValue(dayOfMonthOccurrenceSelector, "the last");
+            clickValue(minuteSelector, "15");
+            clickValue(timeHourSelector, "10");
 
             expect($('#cronexp').jqCronGetInstance().getCron()).toEqual(cronExp);
         });
@@ -192,11 +216,11 @@ describe("JQCron", function(){
         it("for a specific occurrence of a day every month", function () {
             var cronExp = "0 15 10 ? * 6#3";
             
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
-            $('.jqCron-dom > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "the third"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "saturday"; }).click();
-            $('.jqCron-mins > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "15"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "10"; }).click();
+            clickValue(periodSelector, "month");
+            clickValue(dayOfMonthOccurrenceSelector, "the third");
+            clickValue(dayOfWeekSelector, "saturday");
+            clickValue(minuteSelector, "15");
+            clickValue(timeHourSelector, "10");
 
             expect($('#cronexp').jqCronGetInstance().getCron()).toEqual(cronExp);
         });
@@ -204,14 +228,14 @@ describe("JQCron", function(){
         it("when changing occurrence multiple times", function () {
             var cronExp = "0 15 10 15-16 * ?";
             
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
-            $('.jqCron-dom > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "the third"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "friday"; }).click();
-            $('.jqCron-mins > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "15"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "10"; }).click();
-            $('.jqCron-dow > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "every"; }).click();
-            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "15"; }).click();
-            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "16"; }).click();
+            clickValue(periodSelector, "month");
+            clickValue(dayOfMonthOccurrenceSelector, "the third");
+            clickValue(dayOfWeekSelector, "friday");
+            clickValue(minuteSelector, "15");
+            clickValue(timeHourSelector, "10");
+            clickValue(dayOfWeekOccurrenceSelector, "every");
+            clickValue(dayOfMonthSelector, "15");
+            clickValue(dayOfMonthSelector, "16");
 
             expect($('#cronexp').jqCronGetInstance().getCron()).toEqual(cronExp);
         });
@@ -222,10 +246,10 @@ describe("JQCron", function(){
         it ("ensure the occurrence is hidden for 'week' options", function(){
             var cronHumanTextInEnglish = "Every week on friday at 16:05";
 
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "week"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "friday"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "16"; }).click();
-            $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "05"; }).click();
+            clickValue(periodSelector, "week");
+            clickValue(dayOfWeekSelector, "friday");
+            clickValue(timeHourSelector, "16");
+            clickValue(timeMinuteSelector, "05");
 
             expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);        
         });
@@ -233,11 +257,11 @@ describe("JQCron", function(){
         it ("ensure the day of the week is visible for 'month' options when 'every' occurrence isn't set", function(){
             var cronHumanTextInEnglish = "Every month on the second sunday at 14:25";
 
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
-            $('.jqCron-dom > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "the second"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "sunday"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "14"; }).click();
-            $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "25"; }).click();
+            clickValue(periodSelector, "month");
+            clickValue(dayOfMonthOccurrenceSelector, "the second");
+            clickValue(dayOfWeekSelector, "sunday");
+            clickValue(timeHourSelector, "14");
+            clickValue(timeMinuteSelector, "25");
 
             expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);        
         });
@@ -245,11 +269,11 @@ describe("JQCron", function(){
         it ("ensure the occurrence is hidden for 'month' options when days are chosen", function(){
             var cronHumanTextInEnglish = "Every month on 18,26 at 13:20";
 
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "13"; }).click();
-            $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "20"; }).click();
-            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "18"; }).click();
-            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "26"; }).click();
+            clickValue(periodSelector, "month");
+            clickValue(timeHourSelector, "13");
+            clickValue(timeMinuteSelector, "20");
+            clickValue(dayOfMonthSelector, "18");
+            clickValue(dayOfMonthSelector, "26");
 
             expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);        
         });
@@ -257,13 +281,13 @@ describe("JQCron", function(){
         it ("ensure the occurrence is hidden for 'month' options when days are chosen after changing the occurrence", function(){
             var cronHumanTextInEnglish = "Every month on 18,26 at 13:20";
 
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();            
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "13"; }).click();
-            $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "20"; }).click();
-            $('.jqCron-dom > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "the fourth"; }).click();
-            $('.jqCron-dom > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "every"; }).click();
-            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "18"; }).click();
-            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "26"; }).click();
+            clickValue(periodSelector, "month");            
+            clickValue(timeHourSelector, "13");
+            clickValue(timeMinuteSelector, "20");
+            clickValue(dayOfMonthOccurrenceSelector, "the fourth");
+            clickValue(dayOfMonthOccurrenceSelector, "every");
+            clickValue(dayOfMonthSelector, "18");
+            clickValue(dayOfMonthSelector, "26");
 
             expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);        
         });
@@ -271,10 +295,10 @@ describe("JQCron", function(){
         it ("ensure the occurrence is hidden for 'week' options even when no day is selected", function(){
             var cronHumanTextInEnglish = "Every week on day of the week at 04:34";
             
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "week"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "04"; }).click();
-            $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "34"; }).click();
+            clickValue(periodSelector, "month");
+            clickValue(periodSelector, "week");
+            clickValue(timeHourSelector, "04");
+            clickValue(timeMinuteSelector, "34");
 
             expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);
         });
@@ -282,11 +306,11 @@ describe("JQCron", function(){
         it ("not switch week and month positions when selecting a day of the week for a year schedule", function(){
             var cronHumanTextInEnglish = "Every year on the third sunday of august at 06:12";
 
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "year"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "06"; }).click();
-            $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "12"; }).click();
-            $('.jqCron-dow > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "the third"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "sunday"; }).click();
+            clickValue(periodSelector, "year");
+            clickValue(timeHourSelector, "06");
+            clickValue(timeMinuteSelector, "12");
+            clickValue(dayOfWeekOccurrenceSelector, "the third");
+            clickValue(dayOfWeekSelector, "sunday");
             $('.jqCron-month > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "august"; }).click();
 
             expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);
@@ -295,12 +319,12 @@ describe("JQCron", function(){
         it ("not allow multiple weekdays to be selected when an occurrence is selected", function(){
             var cronHumanTextInEnglish = "Every month on the third saturday at 14:27";
 
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "14"; }).click();
-            $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "27"; }).click();
-            $('.jqCron-dow > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "the third"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "sunday"; }).click();
-            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "saturday"; }).click();
+            clickValue(periodSelector, "month");
+            clickValue(timeHourSelector, "14");
+            clickValue(timeMinuteSelector, "27");
+            clickValue(dayOfWeekOccurrenceSelector, "the third");
+            clickValue(dayOfWeekSelector, "sunday");
+            clickValue(dayOfWeekSelector, "saturday");
 
             expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);
         });
