@@ -308,7 +308,7 @@ var jqCronDefaultSettings = {
 					_selectorTimeH.setCronValue(items[2]);
 					if (items[3] == 'L'){
 						_selectorDom.setCronValue("*");
-						_selectorOccurDOM.setCronValue("7"); //Last occurance
+						_selectorOccurDOM.setCronValue("7"); //Last occurrence
 					}
 					else{
 						$('.jqCron-dom > .jqCron-selector-1').hide();
@@ -326,16 +326,16 @@ var jqCronDefaultSettings = {
 						_$blockDOM.hide();
 						_$blockDOW.show();
 						_selectorDow.setCronValue(items[5].substring(0, 1));
-						_selectorOccurDOW.setCronValue("7"); //Last occurance
+						_selectorOccurDOW.setCronValue("7"); //Last occurrence
 					}
 					else if (items[5].includes('#') && items[5].length == 3){
-						var occuranceVal = parseInt(items[5].substring(2, items[5].length)) + 1 + "",
+						var occurrenceVal = parseInt(items[5].substring(2, items[5].length)) + 1 + "",
 							dowVal = items[5].substring(0, 1);
 
 						_selectorPeriod.setValue('month');
 						_$blockDOM.hide();
 						_$blockDOW.show();
-						_selectorOccurDOW.setCronValue(occuranceVal);
+						_selectorOccurDOW.setCronValue(occurrenceVal);
 						_selectorDow.setCronValue(dowVal);
 					}
 					else {
@@ -524,8 +524,8 @@ var jqCronDefaultSettings = {
 
 			// DOW  (day of week)
 			_$blockDOW.append(_self.getText('text_dow'));
-			_selectorOccurDOW = newSelector(_$blockDOW, false, 'occurance');
-			for(i=0, list=_self.getText('occurance'); i<list.length; i++){
+			_selectorOccurDOW = newSelector(_$blockDOW, false, 'occurrence');
+			for(i=0, list=_self.getText('occurrence'); i<list.length; i++){
 				_selectorOccurDOW.add(i+1, list[i]);
 			}
 			_selectorDow = newSelector(_$blockDOW, settings.multiple_dow, 'day_of_week');
@@ -535,8 +535,8 @@ var jqCronDefaultSettings = {
 
 			// DOM  (day of month)
 			_$blockDOM.append(_self.getText('text_dom'));
-			_selectorOccurDOM = newSelector(_$blockDOM, false, 'occurance');
-			for(i=0, list=_self.getText('occurance'); i<list.length; i++){
+			_selectorOccurDOM = newSelector(_$blockDOM, false, 'occurrence');
+			for(i=0, list=_self.getText('occurrence'); i<list.length; i++){
 				_selectorOccurDOM.add(i+1, list[i]);
 			}
 			_selectorDom = newSelector(_$blockDOM, settings.multiple_dom, 'day_of_month');

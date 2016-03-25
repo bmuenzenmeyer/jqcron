@@ -34,5 +34,4 @@ jqCronDefaultSettings.texts.en = {
 	error4: 'Unrecognized expression',
 	weekdays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
 	months: ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'],
-	occurance: ['every', 'the first', 'the second', 'the third', 'the fourth', 'the fifth', 'the last']
 };
