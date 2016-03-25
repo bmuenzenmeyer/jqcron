@@ -17,7 +17,7 @@ module.exports = function(config) {
     files: [
       'test/lib/jquery-1.7.2.min.js',
       'test/lib/jasmine-2.4.1/jasmine.js',
-      'test/lib/jasmine-2.4/1/jasmine-html.js',
+      'test/lib/jasmine-2.4.1/jasmine-html.js',
       'test/lib/jasmine-2.4.1/boot.js',
       'src/jqCron.js',
       'src/jqCron.en.js',
