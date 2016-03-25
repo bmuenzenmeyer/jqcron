@@ -322,8 +322,6 @@ var jqCronDefaultSettings = {
 				}
 				else if(mask.substring(3, mask.length) == '-*?') {			// 4 possibilities
 					_selectorPeriod.setValue('month');
-					_$blockDOW.hide();
-					_$blockDOM.show();
 					_selectorMins.setCronValue(items[1]);
 					_selectorTimeM.setCronValue(items[1]);
 					_selectorTimeH.setCronValue(items[2]);
@@ -332,7 +330,6 @@ var jqCronDefaultSettings = {
 						_selectorOccurDOM.setCronValue("7"); //Last occurrence
 					}
 					else{
-						$('.jqCron-dom > .jqCron-selector-1').hide();
 						_selectorDom.setCronValue(items[3]);
 					}
 				}
@@ -344,8 +341,6 @@ var jqCronDefaultSettings = {
 					//allow for #L in Day of Week
 					if (items[5].substring(1, items[5].length) == 'L'){
 						_selectorPeriod.setValue('month');
-						_$blockDOM.hide();
-						_$blockDOW.show();
 						_selectorDow.setCronValue(items[5].substring(0, 1));
 						_selectorOccurDOW.setCronValue("7"); //Last occurrence
 					}
@@ -354,16 +349,10 @@ var jqCronDefaultSettings = {
 							dowVal = items[5].substring(0, 1);
 
 						_selectorPeriod.setValue('month');
-						_$blockDOM.hide();
-						_$blockDOW.show();
 						_selectorOccurDOW.setCronValue(occurrenceVal);
 						_selectorDow.setCronValue(dowVal);
 					}
 					else {
-						if (items[5].includes('-') || items[5].includes(',')){
-							$('.jqCron-dow > .jqCron-selector-1').hide();
-						}						
-
 						_selectorDow.setCronValue(items[5]);
 					}
 				}
@@ -372,11 +361,7 @@ var jqCronDefaultSettings = {
 					_selectorMins.setCronValue(items[1]);
 					_selectorTimeM.setCronValue(items[1]);
 					_selectorTimeH.setCronValue(items[2]);
-					if (items[3] != 'L'){
-						$('.jqCron-dom > .jqCron-selector-1').hide();						
-					}
-					_selectorDom.setCronValue(items[3]);
-					
+					_selectorDom.setCronValue(items[3]);					
 					_selectorMonth.setCronValue(items[4]);
 				}
 				else {
