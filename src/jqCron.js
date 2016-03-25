@@ -241,7 +241,7 @@ var jqCronDefaultSettings = {
 				items[2] = _selectorTimeH.getCronValue();
 			}
 			if(period == 'month' || period == 'year') {
-				if (_selectorOccurDOW.getCronValue() != '*'){
+				if (_selectorOccurDOW.getCronValue() != '*' && _selectorOccurDOW.getCronValue() != '1'){
 					if (_selectorOccurDOW.getValue() == '7'){
 						if (_selectorDow.getCronValue() == '*'){
 							items[3] = 'L';

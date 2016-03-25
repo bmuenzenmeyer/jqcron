@@ -328,6 +328,5 @@ describe("JQCron", function(){
 
             expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);
         });
-
     });
 });
