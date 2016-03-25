@@ -1,7 +1,7 @@
 describe("JQCron", function(){
 
     beforeAll(function() {   
-            $(function () {
+        $(function () {
             $('#cronexp').jqCron({
                 enabled_minute: false,
                 multiple_dom: true,
@@ -200,6 +200,21 @@ describe("JQCron", function(){
 
             expect($('#cronexp').jqCronGetInstance().getCron()).toEqual(cronExp);
         });
+
+        it("when changing occurrence multiple times correctly", function () {
+            var cronExp = "0 15 10 15-16 * ?";
+            
+            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
+            $('.jqCron-dom > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "the third"; }).click();
+            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "friday"; }).click();
+            $('.jqCron-mins > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "15"; }).click();
+            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "10"; }).click();
+            $('.jqCron-dow > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "every"; }).click();
+            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "15"; }).click();
+            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "16"; }).click();
+
+            expect($('#cronexp').jqCronGetInstance().getCron()).toEqual(cronExp);
+        });
     });
 
     describe("UI should", function() {
@@ -239,28 +254,43 @@ describe("JQCron", function(){
             expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);        
         });
 
-        it ("always hide the occurrence on a week schedule", function(){
-            var cronHumanTextInEnglish = "Every week on every day of the week at 13:20";
-            /*
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
+        it ("ensure the occurrence is hidden for 'month' options when days are chosen after changing the occurrence", function(){
+            var cronHumanTextInEnglish = "Every month on 18,26 at 13:20";
+
+            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();            
             $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "13"; }).click();
             $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "20"; }).click();
+            $('.jqCron-dom > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "the fourth"; }).click();
+            $('.jqCron-dom > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "every"; }).click();
             $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "18"; }).click();
             $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "26"; }).click();
 
-            expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);*/
+            expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);        
+        });
+
+        it ("always hide the occurrence on a week schedule even when no day is selected", function(){
+            var cronHumanTextInEnglish = "Every week on day of the week at 04:34";
+            
+            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
+            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "week"; }).click();
+            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "04"; }).click();
+            $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "34"; }).click();
+
+            expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);
         });
 
         it ("not switch week and month positions when selecting a day of the week for a year schedule", function(){
-            /*var cronHumanTextInEnglish = "Every month on 18,26 at 13:20";
+            var cronHumanTextInEnglish = "Every year on the third sunday of august at 06:12";
 
-            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
-            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "13"; }).click();
-            $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "20"; }).click();
-            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "18"; }).click();
-            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "26"; }).click();
+            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "year"; }).click();
+            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "06"; }).click();
+            $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "12"; }).click();
+            $('.jqCron-dow > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "the third"; }).click();
+            $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "sunday"; }).click();
+            $('.jqCron-month > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "august"; }).click();
 
-            expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);*/
+            expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);
         });
+
     });
 });
