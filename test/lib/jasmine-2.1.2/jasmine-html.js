@@ -63,8 +63,6 @@ jasmineRequire.HtmlReporter = function(j$) {
         )
       );
       getContainer().appendChild(htmlReporterMain);
-
-      symbols = find('.symbol-summary');
     };
 
     var totalSpecsDefined;
@@ -107,6 +105,10 @@ jasmineRequire.HtmlReporter = function(j$) {
 
       if (result.status != 'disabled') {
         specsExecuted++;
+      }
+
+      if(!symbols){
+        symbols = find('.symbol-summary');
       }
 
       symbols.appendChild(createDom('li', {
@@ -267,7 +269,7 @@ jasmineRequire.HtmlReporter = function(j$) {
     function clearPrior() {
       // return the reporter
       var oldReporter = find('');
-      
+
       if(oldReporter) {
         getContainer().removeChild(oldReporter);
       }
