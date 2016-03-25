@@ -6,10 +6,10 @@ describe("JQCron", function(){
                 enabled_minute: false,
                 multiple_dom: true,
                 multiple_month: true,
-                multiple_mins: false,
+                multiple_mins: true,
                 multiple_dow: true,
                 multiple_time_hours: true,
-                multiple_time_minutes: false,
+                multiple_time_minutes: true,
                 default_period: 'week',
                 default_value: '0 * * * * ?',
                 no_reset_button: true,
@@ -90,7 +90,7 @@ describe("JQCron", function(){
             expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);
         });
 
-        it("for the specific occurance a day of a month correctly", function () {
+        it("for the specific occurrence a day of a month correctly", function () {
             var cronExp = "0 15 10 ? * 6#3";
             var cronHumanTextInEnglish = "Every month on the third saturday at 10:15";
 
@@ -189,7 +189,7 @@ describe("JQCron", function(){
             expect($('#cronexp').jqCronGetInstance().getCron()).toEqual(cronExp);
         });
 
-        it("for a specific occurance of a day every month correctly", function () {
+        it("for a specific occurrence of a day every month correctly", function () {
             var cronExp = "0 15 10 ? * 6#3";
             
             $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
@@ -204,7 +204,7 @@ describe("JQCron", function(){
 
     describe("UI should", function() {
 
-        it ("ensure the occurance is hidden for 'week' options", function(){
+        it ("ensure the occurrence is hidden for 'week' options", function(){
             var cronHumanTextInEnglish = "Every week on friday at 16:05";
 
             $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "week"; }).click();
@@ -215,7 +215,7 @@ describe("JQCron", function(){
             expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);        
         });
 
-        it ("ensure the day of the week is visible for 'month' options when 'every' occurance isn't set", function(){
+        it ("ensure the day of the week is visible for 'month' options when 'every' occurrence isn't set", function(){
             var cronHumanTextInEnglish = "Every month on the second sunday at 14:25";
 
             $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
@@ -227,7 +227,7 @@ describe("JQCron", function(){
             expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);        
         });
 
-        it ("ensure the occurance is hidden for 'month' options when days are chosen", function(){
+        it ("ensure the occurrence is hidden for 'month' options when days are chosen", function(){
             var cronHumanTextInEnglish = "Every month on 18,26 at 13:20";
 
             $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
@@ -237,6 +237,30 @@ describe("JQCron", function(){
             $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "26"; }).click();
 
             expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);        
+        });
+
+        it ("always hide the occurrence on a week schedule", function(){
+            var cronHumanTextInEnglish = "Every week on every day of the week at 13:20";
+            /*
+            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
+            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "13"; }).click();
+            $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "20"; }).click();
+            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "18"; }).click();
+            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "26"; }).click();
+
+            expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);*/
+        });
+
+        it ("not switch week and month positions when selecting a day of the week for a year schedule", function(){
+            /*var cronHumanTextInEnglish = "Every month on 18,26 at 13:20";
+
+            $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "month"; }).click();
+            $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "13"; }).click();
+            $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "20"; }).click();
+            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "18"; }).click();
+            $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li').filter(function(a){return $(this).text() === "26"; }).click();
+
+            expect($('#cronexp').jqCronGetInstance().getHumanText()).toEqual(cronHumanTextInEnglish);*/
         });
     });
 });
