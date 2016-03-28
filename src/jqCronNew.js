@@ -327,6 +327,7 @@ $(function(){
 
 		function updateDom(){
 			$('[name="ScheduleType"][value="' + currentState.pattern + '"]').prop('checked', true).change();
+			$('[name="time"]').val(currentState.time).change();
 
 			switch (currentState.pattern){
 				case 'daily':
@@ -351,6 +352,42 @@ $(function(){
 					$('[name="weekOccurrence"]').val(currentState.yearlyOptions.occurrence);
 					break;
 			}
+		}
+
+		function updateFromDom(){
+			if (disableUiUpdates)
+				return;
+
+			currentState.pattern = $('[name="ScheduleType"]:checked').val();
+			currentState.time = $('[name="time"]').val();
+
+			switch (currentState.pattern){
+				case 'daily':
+					currentState.dailyOptions.selected = $('[name="dailyPattern"]:checked').val();
+					break;
+				case 'weekly':
+					currentState.weeklyOptions.days = $('[name="weeklyDays"]:checkbox:checked').map(function() {return this.value;}).get();
+					break;
+				case 'monthly':
+					var state = currentState.monthlyOptions;
+					state.selected = $('[name="monthlyPattern"]:checked').val();
+					state.occurrence = $('[name="weekOccurrence"]').val();
+					state.dayOfWeek = $('[name="dayOfWeek"]').val();
+					state.days = $('[name="date"]').val().split(/[\s,]+/);
+					break;
+				case 'yearly':
+					var state = currentState.yearlyOptions;
+					state.selected = $('[name="yearPattern"]:checked').val();
+					state.months = $('[name="monthSpecificDay"]').multipleSelect('getSelects');
+					state.days = $('[name="dayOfMonth"]').val().split(/[\s,]+/).sort(function(a, b){return (parseInt(b) < parseInt(a))});
+					state.occurrence = $('[name="weekOccurrence"]').val();
+					state.dayOfWeek = $('[name="dayOfWeek"]').val();
+					break;
+			}
+		}
+
+		this.toEnglishString = function(){
+			//Placeholder
 		}
 
 		try{
