@@ -1,5 +1,44 @@
 var a;
 
+(function($){
+	$.fn.jqCron = function(settings) {
+		var saved_settings = settings;
+		return this.each(function() {
+			var cron, saved;
+			var $this = $(this);
+
+			// autoset bind_to if it is an input
+			if($this.is(':input')) {
+				settings.bind_to = settings.bind_to || $this;
+			}
+
+			// init cron object
+			if(settings.bind_to){
+				if(settings.bind_to.is(':input')) {
+					// auto bind from input to object if an input, textarea ...
+					settings.bind_to.blur(function(){
+						var value = settings.bind_method.get(settings.bind_to);
+						$this.jqCronGetInstance().setCron(value);
+					});
+				}
+				saved = settings.bind_method.get(settings.bind_to);
+				cron = new jqCron(settings);
+				cron.setCron(saved);
+			}
+			else {
+				cron = new jqCron(settings);
+			}
+			$(this).data('jqCron', cron);
+		});
+	};
+}).call(this, jQuery);
+
+(function($){
+	$.fn.jqCronGetInstance = function() {
+		return this.data('jqCron');
+	};
+}).call(this, jQuery);
+
 $(function(){
 	var hideAll	= function(){
 		$('#dailyOptions').hide();
@@ -402,7 +441,7 @@ $(function(){
 
 
 
-$(function(){
+/*$(function(){
 	a = new jqCron();
 	console.log(a.getCron());
-});
+});*/

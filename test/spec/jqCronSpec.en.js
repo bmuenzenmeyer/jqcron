@@ -1,22 +1,22 @@
+/*var clickValue = function(selector, value){
+    selector.filter(function(a) { return $(this).text() === value; }).click();
+};*/
+
+/*var periodSelector,
+timeMinuteSelector,
+timeHourSelector,
+minuteSelector,
+dayOfWeekOccurrenceSelector,
+dayOfWeekSelector,
+dayOfMonthOccurrenceSelector,
+dayOfMonthSelector,
+monthSelector;*/
+
 describe("JQCron", function(){
-
-    var clickValue = function(selector, value){
-        selector.filter(function(a) { return $(this).text() === value; }).click();
-    },
-    periodSelector,
-    timeMinuteSelector,
-    timeHourSelector,
-    minuteSelector,
-    dayOfWeekOccurrenceSelector,
-    dayOfWeekSelector,
-    dayOfMonthOccurrenceSelector,
-    dayOfMonthSelector,
-    monthSelector;
-
     beforeAll(function() {   
         $(function () {
-            $('#cronexp').jqCron({
-                enabled_minute: false,
+            $('#Schedule').jqCron({
+                /*enabled_minute: false,
                 multiple_dom: true,
                 multiple_month: true,
                 multiple_mins: true,
@@ -27,10 +27,10 @@ describe("JQCron", function(){
                 default_value: '0 * * * * ?',
                 no_reset_button: true,
                 lang: 'en',
-                numeric_zero_pad: true
+                numeric_zero_pad: true*/
             });
 
-            periodSelector                  = $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li');
+            /*periodSelector                  = $('.jqCron-period > .jqCron-selector > .jqCron-selector-list > li');
             timeHourSelector                = $('.jqCron-time > .jqCron-selector-1 > .jqCron-selector-list > li');
             timeMinuteSelector              = $('.jqCron-time > .jqCron-selector-2 > .jqCron-selector-list > li');
             minuteSelector                  = $('.jqCron-mins > .jqCron-selector > .jqCron-selector-list > li');
@@ -38,7 +38,7 @@ describe("JQCron", function(){
             dayOfWeekSelector               = $('.jqCron-dow > .jqCron-selector-2 > .jqCron-selector-list > li');
             dayOfMonthOccurrenceSelector    = $('.jqCron-dom > .jqCron-selector-1 > .jqCron-selector-list > li');
             dayOfMonthSelector              = $('.jqCron-dom > .jqCron-selector-2 > .jqCron-selector-list > li');
-            monthSelector                   = $('.jqCron-month > .jqCron-selector > .jqCron-selector-list > li');
+            monthSelector                   = $('.jqCron-month > .jqCron-selector > .jqCron-selector-list > li');*/
         });     
     });
 
