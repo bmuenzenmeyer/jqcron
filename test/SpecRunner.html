@@ -5,8 +5,9 @@
 		<title>Jasmine Spec Runner for jqCron lib</title>
 
 		<link rel="shortcut icon" type="image/png" href="lib/jasmine-2.4.1/jasmine_favicon.png" />
-		<link rel="stylesheet" href="lib/jasmine-2.4.1/jasmine.css" />
-		<link rel="stylesheet" type="text/css" href="../src/jqCron.css"/>
+		<!--<link rel="stylesheet" href="lib/jasmine-2.4.1/jasmine.css" />-->
+		<!--<link rel="stylesheet" type="text/css" href="../src/jqCron.css"/>-->
+    <link rel="stylesheet" type="text/css" href="../node_modules/multiple-select/multiple-select.css" />
 
         
 		<script src="lib/jquery-1.7.2.min.js"></script>
@@ -18,6 +19,7 @@
 		<!-- source files -->
         <!--<script src="../src/jqCron.js"></script>-->
         <script src="../src/jqCronNew.js"></script>
+        <script src="../node_modules/multiple-select/multiple-select.js"></script>
         <!--<script src="../src/jqCron.en.js"></script>-->
 
 		<!-- Spec file -->
@@ -35,13 +37,18 @@
             </span>
             <br/><br/>
             <span>
+                <div id="timeOfDayOptions">
+                  <div>
+                </div>
+            </span>
+            <span>
                 <div id="dailyOptions">
-                        <div><input type="radio" value="daily" name="dailyPattern" />Every <input name="dayFrequency" /> days(s)</div>
+                        <div><input type="radio" value="daily" name="dailyPattern" />Every day</div>
                         <div><input type="radio" value="weekday" name="dailyPattern" />Every weekday</div>
                 </div>
                 <div id="weeklyOptions">
                     <div>
-                        Recur every <input name="weekFrequency" /> week(s) on:<br/>
+                        Recur every week on:<br/>
                         <span><input type="checkbox" value="1" name="weeklyDays" />Sunday</span>
                         <span><input type="checkbox" value="2" name="weeklyDays" />Monday</span>
                         <span><input type="checkbox" value="3" name="weeklyDays" />Tuesday</span>
@@ -52,7 +59,7 @@
                     </div>
                 </div>
                 <div id="monthlyOptions">
-                    <div><input type="radio" value="date" name="monthlyPattern" />Day <input name="date" /> of every <input name="monthFrequency"/> month(s)<br/></div>
+                    <div><input type="radio" value="date" name="monthlyPattern" />Day(s) <input name="date" /> of every month<br/></div>
                     <div><input type="radio" value="week" name="monthlyPattern" />The 
                         <select name="weekOccurrence">
                             <option value="#1">First</option>
@@ -70,13 +77,13 @@
                             <option value="5">Thursday</option>
                             <option value="6">Friday</option>
                             <option value="7">Saturday</option>
-                        </select> of every <input name="monthFrequency" /> month(s).
+                        </select> of every month.
                     </div>
                 </div>
                 <div id="yearlyOptions">
-                    <div>Recur every <input name="yearFrequency" /> year(s)</div>
+                    <div>Recur every year</div>
                     <div><input type="radio" name="yearPattern" value="specificDay"/>On: 
-                        <select multiple name="month">
+                        <select multiple name="monthSpecificDay">
                             <option value="1">January</option>
                             <option value="2">February</option>
                             <option value="3">March</option>
@@ -111,7 +118,7 @@
                             <option value="6">Friday</option>
                             <option value="7">Saturday</option>
                         </select> of
-                        <select multiple name="month">
+                        <select multiple name="monthOccurrence">
                             <option value="1">January</option>
                             <option value="2">February</option>
                             <option value="3">March</option>
