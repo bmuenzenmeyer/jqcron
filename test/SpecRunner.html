@@ -38,9 +38,10 @@
             <br/><br/>
             <span>
                 <div id="timeOfDayOptions">
-                  <div>
+                  <div><input type="time" name="time" />
                 </div>
             </span>
+            <br />
             <span>
                 <div id="dailyOptions">
                         <div><input type="radio" value="daily" name="dailyPattern" />Every day</div>
@@ -60,6 +61,7 @@
                 </div>
                 <div id="monthlyOptions">
                     <div><input type="radio" value="date" name="monthlyPattern" />Day(s) <input name="date" /> of every month<br/></div>
+                    <div><input type="radio" value="last" name="monthlyPattern" />The last day of the month.</div>
                     <div><input type="radio" value="week" name="monthlyPattern" />The 
                         <select name="weekOccurrence">
                             <option value="#1">First</option>
