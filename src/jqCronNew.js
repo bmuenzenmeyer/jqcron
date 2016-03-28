@@ -128,7 +128,7 @@ $(function(){
 			}
 		};
 
-		function resetState(){
+		this.reset = function(){
 			currentState = {
 				time: '12:00',
 				pattern: 'daily',
@@ -160,7 +160,7 @@ $(function(){
 			updateDom();
 			$('input,select').on('change', function(){
 				updateFromDom();				
-				console.log(a.getCron());
+				//console.log(this.getCron());
 			});
 		}
 
@@ -183,7 +183,7 @@ $(function(){
 			}
 
 			//reset model to default values
-			resetState();
+			this.reset();
 
 			currentState.time = pad(values[2], 2) + ':' + pad(values[1], 2);
 
@@ -191,7 +191,7 @@ $(function(){
 				var state = currentState.yearlyOptions;
 				//Expression is yearly
 				currentState.pattern = 'yearly';
-				state.months = getCronValue(values[4]);
+				state.months = values[4].split(',');
 
 				if (values[3] != '?'){
 					//Specific day of the month
@@ -291,8 +291,8 @@ $(function(){
 
 			if (currentState.time != ''){
 				var timeArr = currentState.time.split(':');
-				hour = timeArr[0];
-				minute = timeArr[1];
+				hour = parseInt(timeArr[0]) + "";
+				minute = parseInt(timeArr[1]) + "";
 			}
 
 			switch (currentState.pattern){
@@ -426,7 +426,7 @@ $(function(){
 		}
 
 		this.toEnglishString = function(){
-			//Placeholder
+			return "";
 		}
 
 		try{
