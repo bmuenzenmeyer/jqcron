@@ -12,16 +12,6 @@ describe("JQCron", function(){
 
     describe("should translate a CRON schedule", function() {
 
-        it("for every hour correctly", function () {
-            var cronExp = "0 43 * * * ?";
-            var cronHumanTextInEnglish = "Every hour at 43 minute(s) past the hour";
-
-            $('#Schedule').jqCronGetInstance().setCron(cronExp);
-
-            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
-        });
-
-
         it("for every day correctly", function () {
             var cronExp = "0 20 5,7,10 * * ?";
             var cronHumanTextInEnglish = "Every day at 05,07,10:20";
