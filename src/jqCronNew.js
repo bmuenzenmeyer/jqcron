@@ -220,7 +220,7 @@ $(function(){
 				currentState.pattern = 'daily';
 				currentState.dailyOptions.selected = 'weekday';
 			}
-			else if (values[5].indexOf('#') == 0 && values[5].indexOf('L') == 0){
+			else if (values[5].indexOf('#') == -1 && values[5].indexOf('L') == -1){
 				//Expression is weekly
 				currentState.pattern = 'weekly';
 				if (values[5].indexOf('-') > 0){
@@ -426,7 +426,19 @@ $(function(){
 		}
 
 		this.toEnglishString = function(){
-			return "";
+			if (currentState.pattern == 'daily'){
+				result = "Every " + (currentState.dailyOptions.selected == 'weekday' ? 'week' : '') + "day at " + currentState.time;
+			}
+			else if (currentState.pattern == 'weekly'){
+				var days = $(currentState.weeklyOptions.days).map(function(i, val){
+					var dayList = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+					var res = dayList[parseInt(val) - 1];
+					return res;
+				});
+				result = "Every week on " + $.makeArray(days).join(', ') + " at " + currentState.time;
+			}
+
+			return result;
 		}
 
 		try{

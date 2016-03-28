@@ -13,8 +13,17 @@ describe("JQCron", function(){
     describe("should translate a CRON schedule", function() {
 
         it("for every day correctly", function () {
-            var cronExp = "0 20 5,7,10 * * ?";
-            var cronHumanTextInEnglish = "Every day at 05,07,10:20";
+            var cronExp = "0 20 10 * * ?";
+            var cronHumanTextInEnglish = "Every day at 10:20";
+
+            $('#Schedule').jqCronGetInstance().setCron(cronExp);
+
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
+        });
+
+        it("for every weekday correctly", function () {
+            var cronExp = "0 20 10 ? * 2-6";
+            var cronHumanTextInEnglish = "Every weekday at 10:20";
 
             $('#Schedule').jqCronGetInstance().setCron(cronExp);
 
@@ -22,8 +31,8 @@ describe("JQCron", function(){
         });
 
         it("for every week correctly", function () {
-            var cronExp = "0 20 10 ? * 1-5";
-            var cronHumanTextInEnglish = "Every week on monday-friday at 10:20";
+            var cronExp = "0 23 14 ? * 1,4";
+            var cronHumanTextInEnglish = "Every week on Sunday, Wednesday at 14:23";
 
             $('#Schedule').jqCronGetInstance().setCron(cronExp);
 
@@ -31,8 +40,8 @@ describe("JQCron", function(){
         });
 
         it("for every month correctly", function () {
-            var cronExp = "0 52 8-9 26 * ?";
-            var cronHumanTextInEnglish = "Every month on 26 at 08-09:52";
+            var cronExp = "0 52 9 26 * ?";
+            var cronHumanTextInEnglish = "Every month on the 26 at 09:52";
 
             $('#Schedule').jqCronGetInstance().setCron(cronExp);
 
