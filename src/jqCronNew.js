@@ -340,16 +340,16 @@ $(function(){
 					break;
 				case 'monthly':
 					$('[name="monthlyPattern"][value="' + currentState.monthlyOptions.selected + '"]').prop('checked', true).change();
-					$('[name="date"]').val(currentState.monthlyOptions.days.join());
-					$('[name="weekOccurrence"]').val(currentState.monthlyOptions.occurrence);
-					$('[name="dayOfWeek"]').val(currentState.monthlyOptions.dayOfWeek);
+					$('[name="date"]').val(currentState.monthlyOptions.days.join()).change();
+					$('[name="weekOccurrence"]').val(currentState.monthlyOptions.occurrence).change();
+					$('[name="dayOfWeek"]').val(currentState.monthlyOptions.dayOfWeek).change();
 					break;
 				case 'yearly':
 					$('[name="yearPattern"][value="' + currentState.yearlyOptions.selected + '"]').prop('checked', true).change();
 					$('[name="monthSpecificDay"]').multipleSelect('setSelects', currentState.yearlyOptions.months);
-					$('[name="dayOfMonth"]').val(currentState.yearlyOptions.days.join());
-					$('[name="dayOfWeek"]').val(currentState.yearlyOptions.dayOfWeek);
-					$('[name="weekOccurrence"]').val(currentState.yearlyOptions.occurrence);
+					$('[name="dayOfMonth"]').val(currentState.yearlyOptions.days.join()).change();
+					$('[name="dayOfWeek"]').val(currentState.yearlyOptions.dayOfWeek).change();
+					$('[name="weekOccurrence"]').val(currentState.yearlyOptions.occurrence).change();
 					break;
 			}
 		}
@@ -403,5 +403,6 @@ $(function(){
 
 
 $(function(){
-	var a = new jqCron();
-})
+	a = new jqCron();
+	console.log(a.getCron());
+});
