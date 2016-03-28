@@ -1,3 +1,5 @@
+var a;
+
 $(function(){
 	var hideAll	= function(){
 		$('#dailyOptions').hide();
@@ -64,9 +66,10 @@ $(function(){
 (function($){
 	function jqCron(){
 		var currentState = {
+			time: '12:00',
 			pattern: 'daily',
 			dailyOptions: {
-				selected: 'daily'
+				selected: 'weekday'
 			},
 			weeklyOptions: {
 				days: []
@@ -78,7 +81,7 @@ $(function(){
 				dayOfWeek: ''
 			},
 			yearlyOptions: {
-				selected: '',
+				selected: 'weekOccurrence',
 				months: [],
 				days: [],
 				occurrence: '',
@@ -86,12 +89,157 @@ $(function(){
 			}
 		};
 
+		function resetState(){
+			currentState = {
+				time: '12:00',
+				pattern: 'daily',
+				dailyOptions: {
+					selected: 'weekday'
+				},
+				weeklyOptions: {
+					days: []
+				},
+				monthlyOptions: {
+					selected: '',
+					days: [],
+					occurrence: '',
+					dayOfWeek: ''
+				},
+				yearlyOptions: {
+					selected: '',
+					months: [],
+					days: [],
+					occurrence: '',
+					dayOfWeek: ''
+				}
+			};			
+		}
+
+		var disableUiUpdates = false;
+
 		this.init = function(){
 			updateDom();
+			$('input,select').on('change', function(){
+				updateFromDom();				
+				console.log(a.getCron());
+			});
 		}
 
 		this.setCron = function(expression){
+			function pad(string, max){
+				string = string.toString();
+
+				return string.length < max ? pad("0" + string, max) : string;
+			}
+
+			//Model expression format: ss MM hh dd mm ww yyyy
+			var values = expression.split(' ');
+
+			if (values.length == 6){
+				values.push("*"); //explicitely declare every year
+			}
+
+			if (values.length != 7){
+				throw "Invalid Cron: " + expression;
+			}
+
+			//reset model to default values
+			resetState();
+
+			currentState.time = pad(values[2], 2) + ':' + pad(values[1], 2);
+
+			if (values[4] != '*'){
+				var state = currentState.yearlyOptions;
+				//Expression is yearly
+				currentState.pattern = 'yearly';
+				state.months = getCronValue(values[4]);
+
+				if (values[3] != '?'){
+					//Specific day of the month
+					state.selected = 'specificDay';
+					state.days = values[3].split(',');
+				}
+				else if(values[5].indexOf('#') > 0) {
+					//Specific occurrence of the month
+					state.selected = 'weekOccurrence';
+					var occArr = values[5].split('#');
+
+					state.dayOfWeek = occArr[0];
+					state.occurrence = '#' + occArr[1];
+				}
+				else{
+					throw "Unrecognized yearly cron pattern: " + expression;
+				}
+			}
+			else if (values[3] == '*'){
+				//Expression is daily - every day
+				currentState.pattern = 'daily';
+				currentState.dailyOptions.selected = 'daily';
+			}
+			else if (values[5] == '2-6'){
+				//Expression is daily - weekdays
+				currentState.pattern = 'daily';
+				currentState.dailyOptions.selected = 'weekday';
+			}
+			else if (values[5].indexOf('#') == 0 && values[5].indexOf('L') == 0){
+				//Expression is weekly
+				currentState.pattern = 'weekly';
+				if (values[5].indexOf('-') > 0){
+					var inDays = values[5].split('-');
+					var days = [];
+					for (var i = parseInt(inDays[0]); i <= parseInt(inDays[1]); i++) {
+						days.push(i);
+					};
+					currentState.weeklyOptions.days = days;
+				}
+				else{
+					currentState.weeklyOptions.days = values[5].split(',');
+				}
+			}
+			else{
+				//Expression is monthly
+				currentState.pattern = 'monthly';
+				var state = currentState.monthlyOptions;
+
+				if (values[3] == 'L'){
+					state.selected == 'last';
+				}
+				else if (values[5].indexOf('#') > 0){
+					var weekdays = values[5].split('#');
+
+					state.selected = 'week';
+					state.dayOfWeek = weekdays[0];
+					state.occurrence = '#' + weekdays[1];
+				}
+				else if (values[5].indexOf('L') > 0){
+					var weekday = values[5].split('L')[0];
+
+					state.selected = 'week';
+					state.dayOfWeek = weekday;
+					state.occurrence = 'L';
+				}
+				else{
+					state.selected = 'date';
+					if (values[3].indexOf('-') > 0){
+						var inDays = values[3].split('-');
+						var days = [];
+						for (var i = parseInt(inDays[0]); i <= parseInt(inDays[1]); i++) {
+							days.push(i);
+						};
+						state.days = days;
+					}
+					else{
+						state.days = values[3].split(',');
+					}
+					
+				}
+			}
+
+			
+
+			disableUiUpdates = true;
 			updateDom();
+			disableUiUpdates = false;
 		};
 
 		this.getCron = function(){
