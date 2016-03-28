@@ -243,8 +243,86 @@ $(function(){
 		};
 
 		this.getCron = function(){
-			
-			return "0 * * * * ?";
+			var minute = '*',
+				hour = '*',
+				dayOfMonth = '*',
+				month = '*',
+				year = '*',
+				dayOfWeek = '?';
+
+			if (currentState.time != ''){
+				var timeArr = currentState.time.split(':');
+				hour = timeArr[0];
+				minute = timeArr[1];
+			}
+
+			switch (currentState.pattern){
+				case 'daily':
+					var state = currentState.dailyOptions;
+					switch (state.selected){
+						case 'daily':
+							//Do nothing - use defaults
+							break;							
+						case 'weekday':
+							dayOfWeek = '2-6';
+							dayOfMonth = '?';
+							break;
+						default:
+							throw 'Unknown daily state: ' + state.selected;
+					}
+					break;
+				case 'weekly':
+					dayOfWeek = currentState.weeklyOptions.days.join(',');
+					dayOfMonth = '?';
+					break;
+				case 'monthly':
+					var state = currentState.monthlyOptions;
+					switch (state.selected){
+						case 'date':
+							dayOfMonth = state.days.join(',');
+							break;
+						case 'last':
+							dayOfMonth = 'L';
+							break;							
+						case 'week':
+							dayOfMonth = '?';
+							dayOfWeek = state.dayOfWeek + state.occurrence;
+							break;
+						default:
+							throw 'Unknown monthly state: ' + state.selected;
+					}
+					break;					
+				case 'yearly':
+					var state = currentState.yearlyOptions;
+
+					month = state.months.join(',');
+					switch (state.selected){
+						case 'specificDay':
+							dayOfMonth = state.days.join(',');
+							break;
+						case 'weekOccurrence':
+							dayOfMonth = '?';
+							dayOfWeek = state.dayOfWeek + state.occurrence;
+							break;
+						default:
+							throw 'Unknown yearly state: ' + state.selected;
+					}
+					break;
+				default:
+					throw 'Unknown internal state: ' + currentState.pattern;
+					break;
+			}
+
+			var cron = ['0', minute, hour, dayOfMonth, month, dayOfWeek, year]; //Default state = every minute
+
+			cron = cron.map(function(val){
+				if (val == "")
+					return '*';
+
+				return val.toString();
+			});
+
+			return cron.join(' ');
 		};
 
 		function updateDom(){
