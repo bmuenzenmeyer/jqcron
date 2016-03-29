@@ -12,7 +12,9 @@
     <script src="../node_modules/multiple-select/multiple-select.js"></script>
   </head>
   <body>
-    <button>Init!</button>
+    <h1>jqCron 2.0</h1>
+    <h3>Init Schedule Before Doing Anything. This proves nothing is wired to document.ready</h3>
+    <button class="init">Okay already, PUNCH IT!</button>  Debug <input type="text" id="debug" readonly/> <button class="read">Read Cron</button>
 
     <div id="Schedule" class="c-schedule">
       <div class="c-schedule-type">
@@ -23,7 +25,7 @@
             <li><input type="radio" value="yearly" name="ScheduleType"/>Yearly</li>
           </ul>
       </div>
-      <div class="c-schedule-options">
+      <div class="c-schedule-options" style="display: none;">
       <div id="timeOfDayOptions" class="js-schedule-tod">
         <label> Time
           <input type="time" name="time" />
@@ -129,8 +131,19 @@
 
     $(function(){
 
-      $('button').on('click', function(){
-        $('#Schedule').jqCron();
+      var $s = $('#Schedule');
+
+      function updateDebug(){
+        $('#debug').val($s.jqCronGetInstance().getCron());
+      }
+
+      $('.init').on('click', function(){
+        $s.jqCron({});
+        updateDebug();
+      });
+
+      $('.read').on('click', function(){
+        updateDebug();
       });
 
     });

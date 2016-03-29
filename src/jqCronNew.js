@@ -16,17 +16,18 @@ var a;
 			if(settings.bind_to){
 				if(settings.bind_to.is(':input')) {
 					// auto bind from input to object if an input, textarea ...
+					//BM: This seems like an assumption that could be done later / by the caller
 					settings.bind_to.blur(function(){
 						var value = settings.bind_method.get(settings.bind_to);
 						$this.jqCronGetInstance().setCron(value);
 					});
 				}
 				saved = settings.bind_method.get(settings.bind_to);
-				cron = new jqCron(settings);
+				cron = new jqCron(settings, $this);
 				cron.setCron(saved);
 			}
 			else {
-				cron = new jqCron(settings);
+				cron = new jqCron(settings, $this);
 			}
 			$(this).data('jqCron', cron);
 		});
@@ -39,71 +40,14 @@ var a;
 	};
 }).call(this, jQuery);
 
-$(function(){
-	var hideAll	= function(){
-		$('#dailyOptions').hide();
-		$('#weeklyOptions').hide();
-		$('#monthlyOptions').hide();
-		$('#yearlyOptions').hide();		
-	};
-
-	hideAll();
-	$('select[name^="month"]').multipleSelect({
-		width: 260,
-		multiple: true,
-		multipleWidth: 120,
-		placeholder: 'Select months',
-		selectAll: false,
-		minimumCountSelected: 4,
-		ellipsis: true,
-		allSelected: 'Every month'
-	});
-
-	$('select[name="monthSpecificDay"]').on('change', function(){
-		var thisSelects = $(this).multipleSelect('getSelects');
-		var monthOccurrenceSelects = $('select[name="monthOccurrence"]').multipleSelect('getSelects');
-
-		//Check to see if they match - otherwise the updates get called recursively forever		
-		if (!($(thisSelects).not(monthOccurrenceSelects).length === 0 && $(monthOccurrenceSelects).not(thisSelects).length === 0)){
-			$('select[name="monthOccurrence"]').multipleSelect('setSelects', $(this).multipleSelect('getSelects'));
-		}
-	});
-
-	$('select[name="monthOccurrence"]').on('change', function(){
-		var thisSelects = $(this).multipleSelect('getSelects');
-		var specificDaySelects = $('select[name="monthSpecificDay"]').multipleSelect('getSelects');
-
-		//Check to see if they match - otherwise the updates get called recursively forever
-		if (!($(thisSelects).not(specificDaySelects).length === 0 && $(specificDaySelects).not(thisSelects).length === 0)){
-			$('select[name="monthSpecificDay"]').multipleSelect('setSelects', $(this).multipleSelect('getSelects'));
-		}
-	})
-
-	$('[name="ScheduleType"]').on('change', function(){
-		var scr = "#" + $(this).val() + "Options";
-		hideAll();
-		$(scr).show();
-	});
-
-	$('[name$="Frequency"]').on('change', function(){
-		$('[name$="Frequency"]').val($(this).val());
-	});
-
-	$('[name="weekOccurrence"]').on('change', function(){
-		$('[name="weekOccurrence"]').val($(this).val());
-	});
-
-	$('[name="dayOfWeek"]').on('change', function(){
-		$('[name="dayOfWeek"]').val($(this).val());
-	});
-
-	$('[name="month"]').on('change', function(){
-		$('[name="month"]').val($(this).val());
-	});
-});
-
 (function($){
-	function jqCron(){
+	function jqCron(settings, $element){
+		//BM: pass this stuff in so you can wire up the handlers to $el inside init among other things
+		console.log(settings);
+		console.log($element);
+		var self = this;
+		self.$el = $element;
+		console.log(this);
 		var currentState = {
 			time: '12:00',
 			pattern: 'daily',
@@ -151,16 +95,20 @@ $(function(){
 					occurrence: '',
 					dayOfWeek: ''
 				}
-			};			
+			};
 		}
 
 		var disableUiUpdates = false;
 
 		this.init = function(){
+
+			console.log(this);
+			console.log(this.$el);
+			wireEvents();
+
 			updateDom();
 			$('input,select').on('change', function(){
-				updateFromDom();				
-				//console.log(this.getCron());
+				updateFromDom();
 			});
 		}
 
@@ -270,11 +218,11 @@ $(function(){
 					else{
 						state.days = values[3].split(',');
 					}
-					
+
 				}
 			}
 
-			
+
 
 			disableUiUpdates = true;
 			updateDom();
@@ -301,7 +249,7 @@ $(function(){
 					switch (state.selected){
 						case 'daily':
 							//Do nothing - use defaults
-							break;							
+							break;
 						case 'weekday':
 							dayOfWeek = '2-6';
 							dayOfMonth = '?';
@@ -322,7 +270,7 @@ $(function(){
 							break;
 						case 'last':
 							dayOfMonth = 'L';
-							break;							
+							break;
 						case 'week':
 							dayOfMonth = '?';
 							dayOfWeek = state.dayOfWeek + state.occurrence;
@@ -330,7 +278,7 @@ $(function(){
 						default:
 							throw 'Unknown monthly state: ' + state.selected;
 					}
-					break;					
+					break;
 				case 'yearly':
 					var state = currentState.yearlyOptions;
 
@@ -425,6 +373,71 @@ $(function(){
 			}
 		}
 
+		function hideAll(){
+			//BM: convert these to their js equivalents. make sure you handle that autogenned #ID too
+			self.$el.find('#dailyOptions').hide();
+			self.$el.find('#weeklyOptions').hide();
+			self.$el.find('#monthlyOptions').hide();
+			self.$el.find('#yearlyOptions').hide();
+		};
+
+		function wireEvents() {
+			self.$el.find('select[name^="month"]').multipleSelect({
+				width: 260,
+				multiple: true,
+				multipleWidth: 120,
+				placeholder: 'Select months',
+				selectAll: false,
+				minimumCountSelected: 4,
+				ellipsis: true,
+				allSelected: 'Every month'
+			});
+
+			self.$el.find('select[name="monthSpecificDay"]').on('change', function(){
+				var thisSelects = $(this).multipleSelect('getSelects');
+				var monthOccurrenceSelects = self.find('select[name="monthOccurrence"]').multipleSelect('getSelects');
+
+				//Check to see if they match - otherwise the updates get called recursively forever
+				if (!($(thisSelects).not(monthOccurrenceSelects).length === 0 && $(monthOccurrenceSelects).not(thisSelects).length === 0)){
+					self.find('select[name="monthOccurrence"]').multipleSelect('setSelects', $(this).multipleSelect('getSelects'));
+				}
+			});
+
+			self.$el.find('select[name="monthOccurrence"]').on('change', function(){
+				var thisSelects = $(this).multipleSelect('getSelects');
+				var specificDaySelects = $self.find('select[name="monthSpecificDay"]').multipleSelect('getSelects');
+
+				//Check to see if they match - otherwise the updates get called recursively forever
+				if (!($(thisSelects).not(specificDaySelects).length === 0 && $(specificDaySelects).not(thisSelects).length === 0)){
+					self.find('select[name="monthSpecificDay"]').multipleSelect('setSelects', $(this).multipleSelect('getSelects'));
+				}
+			})
+
+			self.$el.find('[name="ScheduleType"]').on('change', function(){
+				self.$el.find('.c-schedule-options').show();
+				var scr = "#" + $(this).val() + "Options";
+				hideAll();
+				self.$el.find(scr).show();
+			});
+
+			//synchronize inputs that have the same name across all options
+			self.$el.find('[name$="Frequency"]').on('change', function(){
+				self.$el.find('[name$="Frequency"]').val($(this).val());
+			});
+
+			self.$el.find('[name="weekOccurrence"]').on('change', function(){
+				self.$el.find('[name="weekOccurrence"]').val($(this).val());
+			});
+
+			self.$el.find('[name="dayOfWeek"]').on('change', function(){
+				self.$el.find('[name="dayOfWeek"]').val($(this).val());
+			});
+
+			self.$el.find('[name="month"]').on('change', function(){
+				self.$el.find('[name="month"]').val($(this).val());
+			});
+		}
+
 		this.toEnglishString = function(){
 			if (currentState.pattern == 'daily'){
 				result = "Every " + (currentState.dailyOptions.selected == 'weekday' ? 'week' : '') + "day at " + currentState.time;
@@ -444,16 +457,9 @@ $(function(){
 		try{
 			this.init();
 		}
-		catch(e){ 
+		catch(e){
+			console.log(e);
 		}
 	}
-	this.jqCron = jqCron;	
+	this.jqCron = jqCron;
 }).call(this, jQuery);
-
-
-
-
-/*$(function(){
-	a = new jqCron();
-	console.log(a.getCron());
-});*/
