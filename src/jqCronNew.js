@@ -481,6 +481,8 @@ $(function(){
 							}
 							break;
 						case 'last':
+							result += "last day of the month at " + currentState.time;
+							break;
 						default:
 							throw 'Not implemented: Monthly.' + state.selected + '.toEnglishString';
 					}					
