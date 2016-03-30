@@ -153,6 +153,10 @@ $(function(){
 					dayOfWeek: ''
 				}
 			};			
+
+			disableUiUpdates = true;
+			updateDom();
+			disableUiUpdates = false;
 		}
 
 		this.init = function(){
