@@ -1,5 +1,3 @@
-var a;
-
 (function($){
 	$.fn.jqCron = function(settings) {
 		var saved_settings = settings;
@@ -103,6 +101,8 @@ var a;
 		}
 
 		this.init = function(){
+			self.$el.append('<div><div><input type="radio" value="daily" name="ScheduleType"/>Daily</div><div><input type="radio" value="weekly" name="ScheduleType"/>Weekly</div><div><input type="radio" value="monthly" name="ScheduleType"/>Monthly</div><div><input type="radio" value="yearly" name="ScheduleType"/>Yearly</div></div><div><div id="timeOfDayOptions"><div><input type="time" name="time" /></div></div></div><div><div id="dailyOptions"><div><input type="radio" value="daily" name="dailyPattern" />Every day</div><div><input type="radio" value="weekday" name="dailyPattern" />Every weekday</div></div><div id="weeklyOptions"><div>Recur every week on:<br/><span><input type="checkbox" value="1" name="weeklyDays" />Sunday</span><span><input type="checkbox" value="2" name="weeklyDays" />Monday</span><span><input type="checkbox" value="3" name="weeklyDays" />Tuesday</span><span><input type="checkbox" value="4" name="weeklyDays" />Wednesday</span><span><input type="checkbox" value="5" name="weeklyDays" />Thursday</span><span><input type="checkbox" value="6" name="weeklyDays" />Friday</span><span><input type="checkbox" value="7" name="weeklyDays" />Saturday</span></div></div><div id="monthlyOptions"><div><input type="radio" value="date" name="monthlyPattern" />Day(s) <input name="date" /> of every month<br/></div><div><input type="radio" value="last" name="monthlyPattern" />The last day of the month.</div><div><input type="radio" value="week" name="monthlyPattern" />The<select name="weekOccurrence"><option value="#1">First</option><option value="#2">Second</option><option value="#3">Third</option><option value="#4">Fourth</option><option value="#5">Fifth</option><option value="L">Last</option></select><select name="dayOfWeek"><option value="1">Sunday</option><option value="2">Monday</option><option value="3">Tuesday</option><option value="4">Wednesday</option><option value="5">Thursday</option><option value="6">Friday</option><option value="7">Saturday</option></select> of every month.</div></div><div id="yearlyOptions"><div>Recur every year</div><div><input type="radio" name="yearPattern" value="specificDay"/>On:<select multiple name="monthSpecificDay"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select><input name="dayOfMonth" /></div><div><input type="radio" name="yearPattern" value="weekOccurrence" />On the:<select name="weekOccurrence"><option value="#1">First</option><option value="#2">Second</option><option value="#3">Third</option><option value="#4">Fourth</option><option value="#5">Fifth</option><option value="L">Last</option></select><select name="dayOfWeek"><option value="1">Sunday</option><option value="2">Monday</option><option value="3">Tuesday</option><option value="4">Wednesday</option><option value="5">Thursday</option><option value="6">Friday</option><option value="7">Saturday</option></select> of<select multiple name="monthOccurrence"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div></div></div>');
+
 			wireEvents();
 
 			updateDom();
@@ -393,21 +393,21 @@ var a;
 
 			self.$el.find('select[name="monthSpecificDay"]').on('change', function(){
 				var thisSelects = $(this).multipleSelect('getSelects');
-				var monthOccurrenceSelects = self.find('select[name="monthOccurrence"]').multipleSelect('getSelects');
+				var monthOccurrenceSelects = self.$el.find('select[name="monthOccurrence"]').multipleSelect('getSelects');
 
 				//Check to see if they match - otherwise the updates get called recursively forever
 				if (!($(thisSelects).not(monthOccurrenceSelects).length === 0 && $(monthOccurrenceSelects).not(thisSelects).length === 0)){
-					self.find('select[name="monthOccurrence"]').multipleSelect('setSelects', $(this).multipleSelect('getSelects'));
+					self.$el.find('select[name="monthOccurrence"]').multipleSelect('setSelects', $(this).multipleSelect('getSelects'));
 				}
 			});
 
 			self.$el.find('select[name="monthOccurrence"]').on('change', function(){
 				var thisSelects = $(this).multipleSelect('getSelects');
-				var specificDaySelects = $self.find('select[name="monthSpecificDay"]').multipleSelect('getSelects');
+				var specificDaySelects = self.$el.find('select[name="monthSpecificDay"]').multipleSelect('getSelects');
 
 				//Check to see if they match - otherwise the updates get called recursively forever
 				if (!($(thisSelects).not(specificDaySelects).length === 0 && $(specificDaySelects).not(thisSelects).length === 0)){
-					self.find('select[name="monthSpecificDay"]').multipleSelect('setSelects', $(this).multipleSelect('getSelects'));
+					self.$el.find('select[name="monthSpecificDay"]').multipleSelect('setSelects', $(this).multipleSelect('getSelects'));
 				}
 			})
 
