@@ -105,28 +105,29 @@ $(function(){
 (function($){
 	function jqCron(){
 		var currentState = {
-			time: '12:00',
-			pattern: 'daily',
-			dailyOptions: {
-				selected: 'weekday'
+				time: '12:00',
+				pattern: 'daily',
+				dailyOptions: {
+					selected: 'weekday'
+				},
+				weeklyOptions: {
+					days: []
+				},
+				monthlyOptions: {
+					selected: '',
+					days: [],
+					occurrence: '',
+					dayOfWeek: ''
+				},
+				yearlyOptions: {
+					selected: 'weekOccurrence',
+					months: [],
+					days: [],
+					occurrence: '',
+					dayOfWeek: ''
+				}
 			},
-			weeklyOptions: {
-				days: []
-			},
-			monthlyOptions: {
-				selected: '',
-				days: [],
-				occurrence: '',
-				dayOfWeek: ''
-			},
-			yearlyOptions: {
-				selected: 'weekOccurrence',
-				months: [],
-				days: [],
-				occurrence: '',
-				dayOfWeek: ''
-			}
-		};
+			disableUiUpdates = false;
 
 		this.reset = function(){
 			currentState = {
@@ -153,8 +154,6 @@ $(function(){
 				}
 			};			
 		}
-
-		var disableUiUpdates = false;
 
 		this.init = function(){
 			updateDom();
