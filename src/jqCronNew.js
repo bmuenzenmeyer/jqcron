@@ -80,7 +80,7 @@
 			disableUiUpdates = true;
 			updateDom();
 			disableUiUpdates = false;
-		}
+		};
 
 		this.init = function(){
 			hideAll();
@@ -143,7 +143,7 @@
 				updateFromDom();				
 				//console.log(this.getCron());
 			});
-		}
+		};
 
 		this.setCron = function(expression){
 			function pad(string, max){
@@ -372,7 +372,7 @@
 					$('[name="weekOccurrence"]').val(currentState.yearlyOptions.occurrence).change();
 					break;
 			}
-		}
+		};
 
 		function updateFromDom(){
 			if (disableUiUpdates)
@@ -404,7 +404,7 @@
 					state.dayOfWeek = $('[name="dayOfWeek"]').val();
 					break;
 			}
-		}
+		};
 
 		this.toEnglishString = function(){
 			var result = '';
@@ -488,13 +488,15 @@
 			}
 
 			return result;
-		}
+		};
 
 		try{
 			this.init();
 		}
 		catch(e){ 
 		}
+
+		this.$ = $(this);
 	}
 
 	this.jqCron = jqCron;	
