@@ -1,7 +1,7 @@
 describe("JQCron", function(){
     beforeAll(function() {   
         $(function () {
-            $('#Schedule').jqCron({});
+            $('#Schedule').jqCron();
         });     
     });
 
@@ -103,6 +103,95 @@ describe("JQCron", function(){
             expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
         });
 
+        it("for every day correctly", function () {
+            var cronExp = "0 0 12 * * ?";
+            var cronHumanTextInEnglish = "Every day at 12:00";
+
+            $('#Schedule').jqCronGetInstance().setCron(cronExp);
+
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
+        });
+
+        it("for every day as outlined by quartz", function () {
+            var cronExp = "0 15 10 ? * *";
+            var cronHumanTextInEnglish = "Every day at 10:15";
+
+            $('#Schedule').jqCronGetInstance().setCron(cronExp);
+
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
+        });
+
+        it("for every day as outlined by quartz", function () {
+            var cronExp = "0 15 10 * * ?";
+            var cronHumanTextInEnglish = "Every day at 10:15";
+
+            $('#Schedule').jqCronGetInstance().setCron(cronExp);
+
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
+        });
+
+        it("for every day as outlined by quartz", function () {
+            var cronExp = "0 15 10 * * ? *";
+            var cronHumanTextInEnglish = "Every day at 10:15";
+
+            $('#Schedule').jqCronGetInstance().setCron(cronExp);
+
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
+        });
+
+        it("for every weekday as outlined by quartz", function () {
+            var cronExp = "0 15 10 ? * 2-6";
+            var cronHumanTextInEnglish = "Every weekday at 10:15";
+
+            $('#Schedule').jqCronGetInstance().setCron(cronExp);
+
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
+        });
+
+        it("for every month on a specific day as outlined by quartz", function () {
+            var cronExp = "0 15 10 15 * ?";
+            var cronHumanTextInEnglish = "Every month on the 15 at 10:15";
+
+            $('#Schedule').jqCronGetInstance().setCron(cronExp);
+
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
+        });
+
+        it("for every month on the last day as outlined by quartz", function () {
+            var cronExp = "0 15 10 L * ?";
+            var cronHumanTextInEnglish = "Every month on the last day of the month at 10:15";
+
+            $('#Schedule').jqCronGetInstance().setCron(cronExp);
+
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
+        });
+
+        it("for every month on the last occurrence as outlined by quartz", function () {
+            var cronExp = "0 15 10 ? * 6L";
+            var cronHumanTextInEnglish = "Every month on the last Friday at 10:15";
+
+            $('#Schedule').jqCronGetInstance().setCron(cronExp);
+
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
+        });
+
+        it("for every month on a specific occurrence as outlined by quartz", function () {
+            var cronExp = "0 15 10 ? * 6#3";
+            var cronHumanTextInEnglish = "Every month on the third Friday at 10:15";
+
+            $('#Schedule').jqCronGetInstance().setCron(cronExp);
+
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
+        });
+
+        it("for every year on a specific day as outlined by quartz", function () {
+            var cronExp = "0 11 11 11 11 ?";
+            var cronHumanTextInEnglish = "Every year on November 11 at 11:11";
+
+            $('#Schedule').jqCronGetInstance().setCron(cronExp);
+
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
+        });
     });
 
     describe("should correctly intrepret dropdowns", function() {
