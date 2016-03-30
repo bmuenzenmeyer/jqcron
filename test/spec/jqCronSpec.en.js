@@ -50,7 +50,7 @@ describe("JQCron", function(){
 
         it("for every year correctly", function () {
             var cronExp = "0 34 21 3 5 ?";
-            var cronHumanTextInEnglish = "Every year on 03 of may at 21:34";
+            var cronHumanTextInEnglish = "Every year on May 3 at 21:34";
 
             $('#Schedule').jqCronGetInstance().setCron(cronExp);
 
@@ -59,7 +59,7 @@ describe("JQCron", function(){
 
         it("for the last saturday of month correctly", function () {
             var cronExp = "0 15 10 ? * 6L";
-            var cronHumanTextInEnglish = "Every month on the last saturday at 10:15";
+            var cronHumanTextInEnglish = "Every month on the last Saturday at 10:15";
 
             $('#Schedule').jqCronGetInstance().setCron(cronExp);
 
@@ -77,7 +77,7 @@ describe("JQCron", function(){
 
         it("for the specific occurrence a day of a month correctly", function () {
             var cronExp = "0 15 10 ? * 6#3";
-            var cronHumanTextInEnglish = "Every month on the third saturday at 10:15";
+            var cronHumanTextInEnglish = "Every month on the third Saturday at 10:15";
 
             $('#Schedule').jqCronGetInstance().setCron(cronExp);
 

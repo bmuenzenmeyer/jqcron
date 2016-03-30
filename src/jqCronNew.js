@@ -444,6 +444,13 @@ $(function(){
 					result = "Every month on the " + currentState.monthlyOptions.days.join(', ') + " at " + currentState.time;
 					break;
 				case 'yearly':
+					var months = $(currentState.yearlyOptions.months).map(function(i, val){
+						var monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+						var res = monthList[parseInt(val) - 1];
+						return res;
+					});
+					result = "Every year on " + $.makeArray(months).join(', ') + " " + currentState.yearlyOptions.days.join(', ') + " at " + currentState.time;
+					break;
 				default:
 					throw 'Not implemented: ' + currentState.pattern + '.toEnglishString';
 			}
