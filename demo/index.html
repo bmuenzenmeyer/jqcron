@@ -16,139 +16,30 @@
     <h3>Init Schedule Before Doing Anything. This proves nothing is wired to document.ready</h3>
     <button class="init">Okay already, PUNCH IT!</button>  Debug <input type="text" id="debug" readonly/> <button class="read">Read Cron</button>
 
-    <div id="Schedule" class="c-schedule">
-      <div class="c-schedule-type">
-          <ul class="c-schedule-type-options">
-            <li><input type="radio" value="daily" name="ScheduleType"/>Daily</li>
-            <li><input type="radio" value="weekly" name="ScheduleType"/>Weekly</li>
-            <li><input type="radio" value="monthly" name="ScheduleType"/>Monthly</li>
-            <li><input type="radio" value="yearly" name="ScheduleType"/>Yearly</li>
-          </ul>
-      </div>
-      <div class="c-schedule-options" style="display: none;">
-      <div id="timeOfDayOptions" class="js-schedule-tod">
-        <label> Time
-          <input type="time" name="time" />
-        </label>
-      </div>
-      <div id="dailyOptions" class="js-schedule-daily">
-              <div><input type="radio" value="daily" name="dailyPattern" />Every day</div>
-              <div><input type="radio" value="weekday" name="dailyPattern" />Every weekday</div>
-      </div>
-      <div id="weeklyOptions" class="js-schedule-weekly">
-          <div>
-              Recur every week on:<br/>
-              <span><input type="checkbox" value="1" name="weeklyDays" />Sunday</span>
-              <span><input type="checkbox" value="2" name="weeklyDays" />Monday</span>
-              <span><input type="checkbox" value="3" name="weeklyDays" />Tuesday</span>
-              <span><input type="checkbox" value="4" name="weeklyDays" />Wednesday</span>
-              <span><input type="checkbox" value="5" name="weeklyDays" />Thursday</span>
-              <span><input type="checkbox" value="6" name="weeklyDays" />Friday</span>
-              <span><input type="checkbox" value="7" name="weeklyDays" />Saturday</span>
-          </div>
-      </div>
-      <div id="monthlyOptions" class="js-schedule-monthly">
-          <div><input type="radio" value="date" name="monthlyPattern" />Day(s) <input name="date" /> of every month<br/></div>
-          <div><input type="radio" value="last" name="monthlyPattern" />The last day of the month.</div>
-          <div><input type="radio" value="week" name="monthlyPattern" />The
-              <select name="weekOccurrence">
-                  <option value="#1">First</option>
-                  <option value="#2">Second</option>
-                  <option value="#3">Third</option>
-                  <option value="#4">Fourth</option>
-                  <option value="#5">Fifth</option>
-                  <option value="L">Last</option>
-              </select>
-              <select name="dayOfWeek">
-                  <option value="1">Sunday</option>
-                  <option value="2">Monday</option>
-                  <option value="3">Tuesday</option>
-                  <option value="4">Wednesday</option>
-                  <option value="5">Thursday</option>
-                  <option value="6">Friday</option>
-                  <option value="7">Saturday</option>
-              </select> of every month.
-          </div>
-      </div>
-      <div id="yearlyOptions" js-schedule-yearly>
-        <div>Recur every year</div>
-        <div><input type="radio" name="yearPattern" value="specificDay"/>On:
-            <select multiple name="monthSpecificDay">
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-            </select>
-            <input name="dayOfMonth" />
-        </div>
-        <div>
-            <input type="radio" name="yearPattern" value="weekOccurrence" />On the:
-            <select name="weekOccurrence">
-                <option value="#1">First</option>
-                <option value="#2">Second</option>
-                <option value="#3">Third</option>
-                <option value="#4">Fourth</option>
-                <option value="#5">Fifth</option>
-                <option value="L">Last</option>
-            </select>
-            <select name="dayOfWeek">
-                <option value="1">Sunday</option>
-                <option value="2">Monday</option>
-                <option value="3">Tuesday</option>
-                <option value="4">Wednesday</option>
-                <option value="5">Thursday</option>
-                <option value="6">Friday</option>
-                <option value="7">Saturday</option>
-            </select> of
-            <select multiple name="monthOccurrence">
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-            </select>
-        </div>
-    </div>
-    </div>
-  </div>
+    <div id="Schedule" class="c-schedule"></div>
 
   <script>
 
-    $(function(){
+      $(function(){
 
-      var $s = $('#Schedule');
+        var $s = $('#Schedule');
 
-      function updateDebug(){
-        $('#debug').val($s.jqCronGetInstance().getCron());
-      }
+        function updateDebug(){
+          $('#debug').val($s.jqCronGetInstance().getCron());
+       }
 
-      $('.init').on('click', function(){
-        $s.jqCron({});
-        updateDebug();
+        $('.init').on('click', function(){
+          $s.jqCron({});
+          updateDebug();
+        });
+
+        $('.read').on('click', function(){
+          updateDebug();
+        });
+
       });
 
-      $('.read').on('click', function(){
-        updateDebug();
-      });
-
-    });
-
-  </script>
+    </script>
 
   </body>
 </html>
