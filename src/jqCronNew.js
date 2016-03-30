@@ -474,7 +474,7 @@ $(function(){
 								if (state.occurrence == 'L'){
 									result += "last";
 								} else {
-									result += toEnglishOccurrence(state.occurrence).join('');
+									result += toEnglishOccurrence(state.occurrence.split('#')).join('');
 								}
 
 								result += " " + toEnglishDays(state.dayOfWeek).join('') + " at " + currentState.time;

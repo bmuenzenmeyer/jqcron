@@ -76,7 +76,7 @@ describe("JQCron", function(){
         });
 
         it("for the specific occurrence a day of a month correctly", function () {
-            var cronExp = "0 15 10 ? * 6#3";
+            var cronExp = "0 15 10 ? * 7#3";
             var cronHumanTextInEnglish = "Every month on the third Saturday at 10:15";
 
             $('#Schedule').jqCronGetInstance().setCron(cronExp);
