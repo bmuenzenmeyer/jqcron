@@ -129,7 +129,7 @@ describe("JQCron", function(){
         });
 
         it("for every month", function () {
-            var cronExp = "0 52 8-9 26 * ?";
+            var cronExp = "0 52 8-9 26 * ? *";
             
             /*clickValue(periodSelector, "month");
             clickValue(minuteSelector, "52");
@@ -141,7 +141,7 @@ describe("JQCron", function(){
         });
 
         it("for every year", function () {
-            var cronExp = "0 34 21 3 5 ?";
+            var cronExp = "0 34 21 3 5 ? *";
             
             /*clickValue(periodSelector, "year");
             clickValue(minuteSelector, "34");
@@ -153,7 +153,7 @@ describe("JQCron", function(){
         });
 
         it("for the last saturday of month", function () {
-            var cronExp = "0 15 10 ? * 6L";
+            var cronExp = "0 15 10 ? * 6L *";
             
             /*clickValue(periodSelector, "month");
             clickValue(dayOfMonthOccurrenceSelector, "the last");
@@ -165,7 +165,7 @@ describe("JQCron", function(){
         });
 
         it("for the last day of a month", function () {
-            var cronExp = "0 15 10 L * ?";
+            var cronExp = "0 15 10 L * ? *";
             
             /*clickValue(periodSelector, "month");
             clickValue(dayOfMonthOccurrenceSelector, "the last");
@@ -176,7 +176,7 @@ describe("JQCron", function(){
         });
 
         it("for a specific occurrence of a day every month", function () {
-            var cronExp = "0 15 10 ? * 6#3";
+            var cronExp = "0 15 10 ? * 6#3 *";
             
             /*clickValue(periodSelector, "month");
             clickValue(dayOfMonthOccurrenceSelector, "the third");
@@ -188,7 +188,7 @@ describe("JQCron", function(){
         });
 
         it("when changing occurrence multiple times", function () {
-            var cronExp = "0 15 10 15-16 * ?";
+            var cronExp = "0 15 10 15-16 * ? *";
             
             /*clickValue(periodSelector, "month");
             clickValue(dayOfMonthOccurrenceSelector, "the third");
