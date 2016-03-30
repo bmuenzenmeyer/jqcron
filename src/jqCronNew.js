@@ -47,7 +47,7 @@ var a;
 		console.log($element);
 		var self = this;
 		self.$el = $element;
-		console.log(this);
+		var disableUiUpdates = false;
 		var currentState = {
 			time: '12:00',
 			pattern: 'daily',
@@ -98,16 +98,11 @@ var a;
 			};
 		}
 
-		var disableUiUpdates = false;
-
 		this.init = function(){
-
-			console.log(this);
-			console.log(this.$el);
 			wireEvents();
 
 			updateDom();
-			$('input,select').on('change', function(){
+			self.$el.find('input,select').on('change', function(){
 				updateFromDom();
 			});
 		}
@@ -313,30 +308,30 @@ var a;
 		};
 
 		function updateDom(){
-			$('[name="ScheduleType"][value="' + currentState.pattern + '"]').prop('checked', true).change();
-			$('[name="time"]').val(currentState.time).change();
+			self.$el.find('[name="ScheduleType"][value="' + currentState.pattern + '"]').prop('checked', true).change();
+			self.$el.find('[name="time"]').val(currentState.time).change();
 
 			switch (currentState.pattern){
 				case 'daily':
-					$('[name="dailyPattern"][value="' + currentState.dailyOptions.selected + '"]').prop('checked', true).change();
+					self.$el.find('[name="dailyPattern"][value="' + currentState.dailyOptions.selected + '"]').prop('checked', true).change();
 					break;
 				case 'weekly':
 					$.each(currentState.weeklyOptions.days, function(){
-						$('[name="weeklyDays"][value="' + this + '"]').prop('checked', true).change();
+						self.$el.find('[name="weeklyDays"][value="' + this + '"]').prop('checked', true).change();
 					});
 					break;
 				case 'monthly':
-					$('[name="monthlyPattern"][value="' + currentState.monthlyOptions.selected + '"]').prop('checked', true).change();
-					$('[name="date"]').val(currentState.monthlyOptions.days.join()).change();
-					$('[name="weekOccurrence"]').val(currentState.monthlyOptions.occurrence).change();
-					$('[name="dayOfWeek"]').val(currentState.monthlyOptions.dayOfWeek).change();
+					self.$el.find('[name="monthlyPattern"][value="' + currentState.monthlyOptions.selected + '"]').prop('checked', true).change();
+					self.$el.find('[name="date"]').val(currentState.monthlyOptions.days.join()).change();
+					self.$el.find('[name="weekOccurrence"]').val(currentState.monthlyOptions.occurrence).change();
+					self.$el.find('[name="dayOfWeek"]').val(currentState.monthlyOptions.dayOfWeek).change();
 					break;
 				case 'yearly':
-					$('[name="yearPattern"][value="' + currentState.yearlyOptions.selected + '"]').prop('checked', true).change();
-					$('[name="monthSpecificDay"]').multipleSelect('setSelects', currentState.yearlyOptions.months);
-					$('[name="dayOfMonth"]').val(currentState.yearlyOptions.days.join()).change();
-					$('[name="dayOfWeek"]').val(currentState.yearlyOptions.dayOfWeek).change();
-					$('[name="weekOccurrence"]').val(currentState.yearlyOptions.occurrence).change();
+					self.$el.find('[name="yearPattern"][value="' + currentState.yearlyOptions.selected + '"]').prop('checked', true).change();
+					self.$el.find('[name="monthSpecificDay"]').multipleSelect('setSelects', currentState.yearlyOptions.months);
+					self.$el.find('[name="dayOfMonth"]').val(currentState.yearlyOptions.days.join()).change();
+					self.$el.find('[name="dayOfWeek"]').val(currentState.yearlyOptions.dayOfWeek).change();
+					self.$el.find('[name="weekOccurrence"]').val(currentState.yearlyOptions.occurrence).change();
 					break;
 			}
 		}
@@ -345,30 +340,30 @@ var a;
 			if (disableUiUpdates)
 				return;
 
-			currentState.pattern = $('[name="ScheduleType"]:checked').val();
-			currentState.time = $('[name="time"]').val();
+			currentState.pattern = self.$el.find('[name="ScheduleType"]:checked').val();
+			currentState.time = self.$el.find('[name="time"]').val();
 
 			switch (currentState.pattern){
 				case 'daily':
-					currentState.dailyOptions.selected = $('[name="dailyPattern"]:checked').val();
+					currentState.dailyOptions.selected = self.$el.find('[name="dailyPattern"]:checked').val();
 					break;
 				case 'weekly':
-					currentState.weeklyOptions.days = $('[name="weeklyDays"]:checkbox:checked').map(function() {return this.value;}).get();
+					currentState.weeklyOptions.days = self.$el.find('[name="weeklyDays"]:checkbox:checked').map(function() {return this.value;}).get();
 					break;
 				case 'monthly':
 					var state = currentState.monthlyOptions;
-					state.selected = $('[name="monthlyPattern"]:checked').val();
-					state.occurrence = $('[name="weekOccurrence"]').val();
-					state.dayOfWeek = $('[name="dayOfWeek"]').val();
-					state.days = $('[name="date"]').val().split(/[\s,]+/);
+					state.selected = self.$el.find('[name="monthlyPattern"]:checked').val();
+					state.occurrence = self.$el.find('[name="weekOccurrence"]').val();
+					state.dayOfWeek = self.$el.find('[name="dayOfWeek"]').val();
+					state.days = self.$el.find('[name="date"]').val().split(/[\s,]+/);
 					break;
 				case 'yearly':
 					var state = currentState.yearlyOptions;
-					state.selected = $('[name="yearPattern"]:checked').val();
-					state.months = $('[name="monthSpecificDay"]').multipleSelect('getSelects');
-					state.days = $('[name="dayOfMonth"]').val().split(/[\s,]+/).sort(function(a, b){return (parseInt(b) < parseInt(a))});
-					state.occurrence = $('[name="weekOccurrence"]').val();
-					state.dayOfWeek = $('[name="dayOfWeek"]').val();
+					state.selected = self.$el.find('[name="yearPattern"]:checked').val();
+					state.months = self.$el.find('[name="monthSpecificDay"]').multipleSelect('getSelects');
+					state.days = self.$el.find('[name="dayOfMonth"]').val().split(/[\s,]+/).sort(function(a, b){return (parseInt(b) < parseInt(a))});
+					state.occurrence = self.$el.find('[name="weekOccurrence"]').val();
+					state.dayOfWeek = self.$el.find('[name="dayOfWeek"]').val();
 					break;
 			}
 		}
@@ -443,7 +438,7 @@ var a;
 				result = "Every " + (currentState.dailyOptions.selected == 'weekday' ? 'week' : '') + "day at " + currentState.time;
 			}
 			else if (currentState.pattern == 'weekly'){
-				var days = $(currentState.weeklyOptions.days).map(function(i, val){
+				var days = self.$el.find(currentState.weeklyOptions.days).map(function(i, val){
 					var dayList = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 					var res = dayList[parseInt(val) - 1];
 					return res;

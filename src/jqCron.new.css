@@ -2,7 +2,6 @@
   margin: 1em;
   padding: .5em;
   background-color: #efefef;
-  overflow: hidden;
   display: flex;
 }
 
@@ -20,3 +19,5 @@ ul{
   list-style-type: none;
   padding-left: 0;
 }
+
+/* markup still needs some work */
