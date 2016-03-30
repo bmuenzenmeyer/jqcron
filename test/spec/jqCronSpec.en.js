@@ -194,7 +194,7 @@ describe("JQCron", function(){
         });
     });
 
-    describe("should correctly intrepret dropdowns", function() {
+    describe("should correctly intrepret interface", function() {
 
         it("for every day", function () {
             var cronExp = "0 20 5 * * ? *";
