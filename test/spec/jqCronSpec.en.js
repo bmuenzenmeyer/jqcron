@@ -112,7 +112,7 @@ describe("JQCron", function(){
             var englishString = "Every day at 05:20";
 
             $('#Schedule [name="ScheduleType"][value="daily"]').click();
-            $('#Schedule #timeOfDayOptions [name="dailyPattern"][value="daily"]').click();
+            $('#Schedule [name="dailyPattern"][value="daily"]').click();
             $('#Schedule [name="time"]').val("05:20").change();
 
             expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);
@@ -124,8 +124,8 @@ describe("JQCron", function(){
             var englishString = "Every weekday at 07:21";
 
             $('#Schedule [name="ScheduleType"][value="daily"]').click();
-            $('#Schedule #timeOfDayOptions [name="dailyPattern"][value="weekday"]').click();
-            $('#Schedule [name="time"]').val("07:21").change();
+            $('#Schedule [name="dailyPattern"][value="weekday"]').click();
+            $('#Schedule #timeOfDayOptions [name="time"]').val("07:21").change();
 
             expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);
             expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(englishString);
@@ -136,12 +136,12 @@ describe("JQCron", function(){
             var englishString = "Every week on Sunday, Monday, Tuesday, Wednesday, Thursday at 10:20";
 
             $('#Schedule [name="ScheduleType"][value="weekly"]').click();
-            $('#Schedule [name="time"]').val("10:20").change();
-            $('#Schedule #timeOfDayOptions #weeklyOptions input[name="weeklyDays"][value="1"]').click();
-            $('#Schedule #timeOfDayOptions #weeklyOptions input[name="weeklyDays"][value="2"]').click();
-            $('#Schedule #timeOfDayOptions #weeklyOptions input[name="weeklyDays"][value="3"]').click();
-            $('#Schedule #timeOfDayOptions #weeklyOptions input[name="weeklyDays"][value="4"]').click();
-            $('#Schedule #timeOfDayOptions #weeklyOptions input[name="weeklyDays"][value="5"]').click();
+            $('#Schedule #timeOfDayOptions [name="time"]').val("10:20").change();
+            $('#Schedule #weeklyOptions input[name="weeklyDays"][value="1"]').click();
+            $('#Schedule #weeklyOptions input[name="weeklyDays"][value="2"]').click();
+            $('#Schedule #weeklyOptions input[name="weeklyDays"][value="3"]').click();
+            $('#Schedule #weeklyOptions input[name="weeklyDays"][value="4"]').click();
+            $('#Schedule #weeklyOptions input[name="weeklyDays"][value="5"]').click();
 
             expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);    
             expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(englishString);
@@ -152,9 +152,9 @@ describe("JQCron", function(){
             var englishString = "Every month on the 8-11 at 08:52";
 
             $('#Schedule [name="ScheduleType"][value="monthly"]').click();
-            $('#Schedule [name="time"]').val("08:52").change();
-            $('#Schedule #timeOfDayOptions #monthlyOptions [name="monthlyPattern"][value="date"]').click();
-            $('#Schedule #timeOfDayOptions #monthlyOptions [name="date"]').val('8-11').change();
+            $('#Schedule #timeOfDayOptions [name="time"]').val("08:52").change();
+            $('#Schedule #monthlyOptions [name="monthlyPattern"][value="date"]').click();
+            $('#Schedule #monthlyOptions [name="date"]').val('8-11').change();
 
             expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);
             expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(englishString);
@@ -165,9 +165,9 @@ describe("JQCron", function(){
             var englishString = "Every month on the 8, 14, 26 at 09:52";
 
             $('#Schedule [name="ScheduleType"][value="monthly"]').click();
-            $('#Schedule [name="time"]').val("09:52").change();
-            $('#Schedule #timeOfDayOptions #monthlyOptions [name="monthlyPattern"][value="date"]').click();
-            $('#Schedule #timeOfDayOptions #monthlyOptions [name="date"]').val('8, 14, 26').change();
+            $('#Schedule #timeOfDayOptions [name="time"]').val("09:52").change();
+            $('#Schedule #monthlyOptions [name="monthlyPattern"][value="date"]').click();
+            $('#Schedule #monthlyOptions [name="date"]').val('8, 14, 26').change();
 
             expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);
             expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(englishString);
@@ -178,10 +178,10 @@ describe("JQCron", function(){
             var englishString = "Every month on the third Monday at 09:04";
 
             $('#Schedule [name="ScheduleType"][value="monthly"]').click();
-            $('#Schedule [name="time"]').val("09:04").change();
-            $('#Schedule #timeOfDayOptions #monthlyOptions [name="monthlyPattern"][value="week"]').click();
-            $('#Schedule #timeOfDayOptions #monthlyOptions [name="weekOccurrence"]').val('#3').change();
-            $('#Schedule #timeOfDayOptions #monthlyOptions [name="dayOfWeek"]').val('2').change();
+            $('#Schedule #timeOfDayOptions [name="time"]').val("09:04").change();
+            $('#Schedule #monthlyOptions [name="monthlyPattern"][value="week"]').click();
+            $('#Schedule #monthlyOptions [name="weekOccurrence"]').val('#3').change();
+            $('#Schedule #monthlyOptions [name="dayOfWeek"]').val('2').change();
             
             expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);
             expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(englishString);
@@ -192,10 +192,10 @@ describe("JQCron", function(){
             var englishString = "Every month on the last Friday at 10:15";
 
             $('#Schedule [name="ScheduleType"][value="monthly"]').click();
-            $('#Schedule [name="time"]').val("10:15").change();
-            $('#Schedule #timeOfDayOptions #monthlyOptions [name="monthlyPattern"][value="week"]').click();
-            $('#Schedule #timeOfDayOptions #monthlyOptions [name="weekOccurrence"]').val('L').change();
-            $('#Schedule #timeOfDayOptions #monthlyOptions [name="dayOfWeek"]').val('6').change();
+            $('#Schedule #timeOfDayOptions [name="time"]').val("10:15").change();
+            $('#Schedule #monthlyOptions [name="monthlyPattern"][value="week"]').click();
+            $('#Schedule #monthlyOptions [name="weekOccurrence"]').val('L').change();
+            $('#Schedule #monthlyOptions [name="dayOfWeek"]').val('6').change();
             
             expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);
             expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(englishString);
@@ -206,8 +206,8 @@ describe("JQCron", function(){
             var englishString = "Every month on the last day of the month at 10:15";
 
             $('#Schedule [name="ScheduleType"][value="monthly"]').click();
-            $('#Schedule [name="time"]').val("10:15").change();
-            $('#Schedule #timeOfDayOptions #monthlyOptions [name="monthlyPattern"][value="last"]').click();
+            $('#Schedule #timeOfDayOptions [name="time"]').val("10:15").change();
+            $('#Schedule #monthlyOptions [name="monthlyPattern"][value="last"]').click();
             
             expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);
             expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(englishString);
@@ -218,10 +218,10 @@ describe("JQCron", function(){
             var englishString = "Every year on May 3 at 21:34";
 
             $('#Schedule [name="ScheduleType"][value="yearly"]').click();
-            $('#Schedule [name="time"]').val("21:34").change();
-            $('#Schedule #timeOfDayOptions #yearlyOptions [name="yearPattern"][value="specificDay"]').click();
-            $('#Schedule #timeOfDayOptions #yearlyOptions select[name="monthSpecificDay"]').multipleSelect('setSelects', ["5"]);
-            $('#Schedule #timeOfDayOptions #yearlyOptions [name="dayOfMonth"]').val('3').change();
+            $('#Schedule #timeOfDayOptions [name="time"]').val("21:34").change();
+            $('#Schedule #yearlyOptions [name="yearPattern"][value="specificDay"]').click();
+            $('#Schedule #yearlyOptions select[name="monthSpecificDay"]').multipleSelect('setSelects', ["5"]);
+            $('#Schedule #yearlyOptions [name="dayOfMonth"]').val('3').change();
             
             expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);
             expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(englishString);
@@ -232,10 +232,10 @@ describe("JQCron", function(){
             var englishString = "Every year on July 3, 6 at 21:18";
 
             $('#Schedule [name="ScheduleType"][value="yearly"]').click();
-            $('#Schedule [name="time"]').val("21:18").change();
-            $('#Schedule #timeOfDayOptions #yearlyOptions [name="yearPattern"][value="specificDay"]').click();
-            $('#Schedule #timeOfDayOptions #yearlyOptions select[name="monthSpecificDay"]').multipleSelect('setSelects', ["7"]);
-            $('#Schedule #timeOfDayOptions #yearlyOptions [name="dayOfMonth"]').val('3, 6').change();
+            $('#Schedule #timeOfDayOptions [name="time"]').val("21:18").change();
+            $('#Schedule #yearlyOptions [name="yearPattern"][value="specificDay"]').click();
+            $('#Schedule #yearlyOptions select[name="monthSpecificDay"]').multipleSelect('setSelects', ["7"]);
+            $('#Schedule #yearlyOptions [name="dayOfMonth"]').val('3, 6').change();
             
             expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);
             expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(englishString);
@@ -246,11 +246,11 @@ describe("JQCron", function(){
             var englishString = "Every year on the first Tuesday of August at 21:27";
 
             $('#Schedule [name="ScheduleType"][value="yearly"]').click();
-            $('#Schedule [name="time"]').val("21:27").change();
-            $('#Schedule #timeOfDayOptions #yearlyOptions [name="yearPattern"][value="weekOccurrence"]').click();
-            $('#Schedule #timeOfDayOptions #yearlyOptions select[name="weekOccurrence"]').val('#1').change();
-            $('#Schedule #timeOfDayOptions #yearlyOptions select[name="dayOfWeek"]').val('3').change();
-            $('#Schedule #timeOfDayOptions #yearlyOptions select[name="monthOccurrence"]').multipleSelect('setSelects', ["8"]);
+            $('#Schedule #timeOfDayOptions [name="time"]').val("21:27").change();
+            $('#Schedule #yearlyOptions [name="yearPattern"][value="weekOccurrence"]').click();
+            $('#Schedule #yearlyOptions select[name="weekOccurrence"]').val('#1').change();
+            $('#Schedule #yearlyOptions select[name="dayOfWeek"]').val('3').change();
+            $('#Schedule #yearlyOptions select[name="monthOccurrence"]').multipleSelect('setSelects', ["8"]);
             
             expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);
             expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(englishString);
@@ -261,11 +261,11 @@ describe("JQCron", function(){
             var englishString = "Every year on the fourth Saturday of January, February, March at 21:12";
 
             $('#Schedule [name="ScheduleType"][value="yearly"]').click();
-            $('#Schedule [name="time"]').val("21:12").change();
-            $('#Schedule #timeOfDayOptions #yearlyOptions [name="yearPattern"][value="weekOccurrence"]').click();
-            $('#Schedule #timeOfDayOptions #yearlyOptions select[name="weekOccurrence"]').val('#4').change();
-            $('#Schedule #timeOfDayOptions #yearlyOptions select[name="dayOfWeek"]').val('7').change();
-            $('#Schedule #timeOfDayOptions #yearlyOptions select[name="monthOccurrence"]').multipleSelect('setSelects', ["1", "2", "3"]);
+            $('#Schedule #timeOfDayOptions [name="time"]').val("21:12").change();
+            $('#Schedule #yearlyOptions [name="yearPattern"][value="weekOccurrence"]').click();
+            $('#Schedule #yearlyOptions select[name="weekOccurrence"]').val('#4').change();
+            $('#Schedule #yearlyOptions select[name="dayOfWeek"]').val('7').change();
+            $('#Schedule #yearlyOptions select[name="monthOccurrence"]').multipleSelect('setSelects', ["1", "2", "3"]);
             
             expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);
             expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(englishString);
