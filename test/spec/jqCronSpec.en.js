@@ -88,26 +88,28 @@ describe("JQCron", function(){
 
     describe("should correctly intrepret dropdowns", function() {
 
-        it ("for a specific hour correctly", function(){
-            var cronExp = "0 43 * * * ?";
-
-            /*clickValue(periodSelector, "hour");
-
-            clickValue(minuteSelector, "43");        */
-
-            expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);        
-        })
-
         it("for every day", function () {
-            var cronExp = "0 20 5,7,10 * * ?";
+            var cronExp = "0 20 5 * * ? *";
+            var englishString = "Every day at 05:20";
 
-            /*clickValue(periodSelector, "day");        
-            clickValue(timeHourSelector, "05");        
-            clickValue(timeHourSelector, "07");        
-            clickValue(timeHourSelector, "10"); 
-            clickValue(minuteSelector, "20");*/
+            $('#Schedule [name="ScheduleType"][value="daily"]').click();
+            $('#Schedule #timeOfDayOptions [name="dailyPattern"][value="daily"]').click();
+            $('#Schedule [name="time"]').val("05:20").change();
 
-            expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);    
+            expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(englishString);
+        });
+
+        it("for every weekday", function(){
+            var cronExp = "0 21 7 ? * 2-6 *";
+            var englishString = "Every weekday at 07:21";
+
+            $('#Schedule [name="ScheduleType"][value="daily"]').click();
+            $('#Schedule #timeOfDayOptions [name="dailyPattern"][value="weekday"]').click();
+            $('#Schedule [name="time"]').val("07:21").change();
+
+            expect($('#Schedule').jqCronGetInstance().getCron()).toEqual(cronExp);
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(englishString);
         });
 
         it("for every week", function () {
