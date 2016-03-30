@@ -214,7 +214,7 @@ $(function(){
 				currentState.pattern = 'daily';
 				currentState.dailyOptions.selected = 'daily';
 			}
-			else if (values[5] == '2-6'){
+			else if (values[5] == '2-6' || values[5] == '2,3,4,5,6'){
 				//Expression is daily - weekdays
 				currentState.pattern = 'daily';
 				currentState.dailyOptions.selected = 'weekday';
