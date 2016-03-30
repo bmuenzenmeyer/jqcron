@@ -191,7 +191,7 @@
 					throw "Unrecognized yearly cron pattern: " + expression;
 				}
 			}
-			else if (values[3] == '*'){
+			else if (values[3] == '*' || values[5] == '*'){
 				//Expression is daily - every day
 				currentState.pattern = 'daily';
 				currentState.dailyOptions.selected = 'daily';
