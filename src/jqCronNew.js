@@ -427,28 +427,66 @@ $(function(){
 		this.toEnglishString = function(){
 			var result = '';
 
+			var toAltValues = function(stringsArr, values){
+				if ($.isArray(values)){
+					res = $(values).map(function(i, val){return stringsArr[parseInt(val) - 1]; });
+				} else {
+					res = stringsArr[parseInt(values) - 1];
+				}
+				
+				return $.makeArray(res);
+			}			
+
+			var toEnglishDays = function(values){
+				var dayList = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+				return toAltValues(dayList, values);
+			};
+
+			var toEnglishMonths = function(values){
+				var monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+				return toAltValues(monthList, values);
+			};
+
+			var toEnglishOccurrence = function(values){
+				var occurrenceList = ["first", "second", "third", "fourth", "fifth"];
+
+				return toAltValues(occurrenceList, values);
+			};
+
 			switch (currentState.pattern){
 				case 'daily':
 					result = "Every " + (currentState.dailyOptions.selected == 'weekday' ? 'week' : '') + "day at " + currentState.time;
 					break;
-				case 'weekly':
-					var days = $(currentState.weeklyOptions.days).map(function(i, val){
-						var dayList = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-						var res = dayList[parseInt(val) - 1];
-						return res;
-					});
-					result = "Every week on " + $.makeArray(days).join(', ') + " at " + currentState.time;
+				case 'weekly':					
+					result = "Every week on " + toEnglishDays(currentState.weeklyOptions.days).join(', ') + " at " + currentState.time;
 					break;
 				case 'monthly':
-					result = "Every month on the " + currentState.monthlyOptions.days.join(', ') + " at " + currentState.time;
+					var state = currentState.monthlyOptions;
+					result = 'Every month on the ';
+					switch (state.selected){
+						case 'date':
+							result += state.days.join(', ') + " at " + currentState.time;
+							break;
+						case 'last':
+						case 'week':
+							if (state.occurrence != ''){
+								if (state.occurrence == 'L'){
+									result += "last";
+								} else {
+									result += toEnglishOccurrence(state.occurrence).join('');
+								}
+
+								result += " " + toEnglishDays(state.dayOfWeek).join('') + " at " + currentState.time;
+							}
+							break;
+						default:
+							throw 'Not implemented: Monthly.' + state.selected + '.toEnglishString';
+					}					
 					break;
 				case 'yearly':
-					var months = $(currentState.yearlyOptions.months).map(function(i, val){
-						var monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-						var res = monthList[parseInt(val) - 1];
-						return res;
-					});
-					result = "Every year on " + $.makeArray(months).join(', ') + " " + currentState.yearlyOptions.days.join(', ') + " at " + currentState.time;
+					result = "Every year on " + toEnglishMonths(currentState.yearlyOptions.months).join(', ') + " " + currentState.yearlyOptions.days.join(', ') + " at " + currentState.time;
 					break;
 				default:
 					throw 'Not implemented: ' + currentState.pattern + '.toEnglishString';

@@ -59,7 +59,7 @@ describe("JQCron", function(){
 
         it("for the last saturday of month correctly", function () {
             var cronExp = "0 15 10 ? * 6L";
-            var cronHumanTextInEnglish = "Every month on the last Saturday at 10:15";
+            var cronHumanTextInEnglish = "Every month on the last Friday at 10:15";
 
             $('#Schedule').jqCronGetInstance().setCron(cronExp);
 
