@@ -240,7 +240,7 @@ $(function(){
 				var state = currentState.monthlyOptions;
 
 				if (values[3] == 'L'){
-					state.selected == 'last';
+					state.selected = 'last';
 				}
 				else if (values[5].indexOf('#') > 0){
 					var weekdays = values[5].split('#');
@@ -469,7 +469,6 @@ $(function(){
 						case 'date':
 							result += state.days.join(', ') + " at " + currentState.time;
 							break;
-						case 'last':
 						case 'week':
 							if (state.occurrence != ''){
 								if (state.occurrence == 'L'){
@@ -481,6 +480,7 @@ $(function(){
 								result += " " + toEnglishDays(state.dayOfWeek).join('') + " at " + currentState.time;
 							}
 							break;
+						case 'last':
 						default:
 							throw 'Not implemented: Monthly.' + state.selected + '.toEnglishString';
 					}					
