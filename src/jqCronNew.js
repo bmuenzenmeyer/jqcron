@@ -1,6 +1,7 @@
 (function($){
-	$.fn.jqCron = function(settings) {
+	$.fn.jqCron = function(settings = {}) {
 		var saved_settings = settings;
+
 		return this.each(function() {
 			var cron, saved;
 			var $this = $(this);
