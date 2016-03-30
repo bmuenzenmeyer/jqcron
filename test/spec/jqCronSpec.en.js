@@ -85,6 +85,24 @@ describe("JQCron", function(){
             expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
         });
 
+        it("for the specific day of a year correctly", function () {
+            var cronExp = "0 18 22 14 11 ? *";
+            var cronHumanTextInEnglish = "Every year on November 14 at 22:18";
+
+            $('#Schedule').jqCronGetInstance().setCron(cronExp);
+
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
+        });
+
+        it("for the specific occurrence of a year correctly", function () {
+            var cronExp = "0 3 1 ? 12 2#4 *";
+            var cronHumanTextInEnglish = "Every year on the fourth Monday of December at 01:03";
+
+            $('#Schedule').jqCronGetInstance().setCron(cronExp);
+
+            expect($('#Schedule').jqCronGetInstance().toEnglishString()).toEqual(cronHumanTextInEnglish);
+        });
+
     });
 
     describe("should correctly intrepret dropdowns", function() {

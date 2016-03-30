@@ -492,7 +492,18 @@ $(function(){
 					}					
 					break;
 				case 'yearly':
-					result = "Every year on " + toEnglishMonths(currentState.yearlyOptions.months).join(', ') + " " + currentState.yearlyOptions.days.join(', ') + " at " + currentState.time;
+					var state = currentState.yearlyOptions;
+					switch (state.selected){
+						case 'specificDay':
+							result = "Every year on " + toEnglishMonths(state.months).join(', ') + " " + state.days.join(', ') + " at " + currentState.time;
+							break;
+						case 'weekOccurrence':
+							result = "Every year on the " + toEnglishOccurrence(state.occurrence.split('#')).join('') + " " + toEnglishDays(state.dayOfWeek).join('') + " of " + toEnglishMonths(state.months).join(', ') + " at " + currentState.time;
+							break;
+						default:
+							throw 'Not implemented: Yearly.' + state.selected + '.toEnglishString';
+					}
+					
 					break;
 				default:
 					throw 'Not implemented: ' + currentState.pattern + '.toEnglishString';
