@@ -1,33 +1,12 @@
-var a;
-
 (function($){
-	$.fn.jqCron = function(settings) {
-		var saved_settings = settings;
+	$.fn.jqCron = function() {
 		return this.each(function() {
-			var cron, saved;
+			var cron;
+
 			var $this = $(this);
 
-			// autoset bind_to if it is an input
-			if($this.is(':input')) {
-				settings.bind_to = settings.bind_to || $this;
-			}
+			cron = new jqCron();
 
-			// init cron object
-			if(settings.bind_to){
-				if(settings.bind_to.is(':input')) {
-					// auto bind from input to object if an input, textarea ...
-					settings.bind_to.blur(function(){
-						var value = settings.bind_method.get(settings.bind_to);
-						$this.jqCronGetInstance().setCron(value);
-					});
-				}
-				saved = settings.bind_method.get(settings.bind_to);
-				cron = new jqCron(settings);
-				cron.setCron(saved);
-			}
-			else {
-				cron = new jqCron(settings);
-			}
 			$(this).data('jqCron', cron);
 		});
 	};
@@ -38,69 +17,6 @@ var a;
 		return this.data('jqCron');
 	};
 }).call(this, jQuery);
-
-$(function(){
-	var hideAll	= function(){
-		$('#dailyOptions').hide();
-		$('#weeklyOptions').hide();
-		$('#monthlyOptions').hide();
-		$('#yearlyOptions').hide();		
-	};
-
-	hideAll();
-	$('select[name^="month"]').multipleSelect({
-		width: 260,
-		multiple: true,
-		multipleWidth: 120,
-		placeholder: 'Select months',
-		selectAll: false,
-		minimumCountSelected: 4,
-		ellipsis: true,
-		allSelected: 'Every month'
-	});
-
-	$('select[name="monthSpecificDay"]').on('change', function(){
-		var thisSelects = $(this).multipleSelect('getSelects');
-		var monthOccurrenceSelects = $('select[name="monthOccurrence"]').multipleSelect('getSelects');
-
-		//Check to see if they match - otherwise the updates get called recursively forever		
-		if (!($(thisSelects).not(monthOccurrenceSelects).length === 0 && $(monthOccurrenceSelects).not(thisSelects).length === 0)){
-			$('select[name="monthOccurrence"]').multipleSelect('setSelects', $(this).multipleSelect('getSelects'));
-		}
-	});
-
-	$('select[name="monthOccurrence"]').on('change', function(){
-		var thisSelects = $(this).multipleSelect('getSelects');
-		var specificDaySelects = $('select[name="monthSpecificDay"]').multipleSelect('getSelects');
-
-		//Check to see if they match - otherwise the updates get called recursively forever
-		if (!($(thisSelects).not(specificDaySelects).length === 0 && $(specificDaySelects).not(thisSelects).length === 0)){
-			$('select[name="monthSpecificDay"]').multipleSelect('setSelects', $(this).multipleSelect('getSelects'));
-		}
-	})
-
-	$('[name="ScheduleType"]').on('change', function(){
-		var scr = "#" + $(this).val() + "Options";
-		hideAll();
-		$(scr).show();
-	});
-
-	$('[name$="Frequency"]').on('change', function(){
-		$('[name$="Frequency"]').val($(this).val());
-	});
-
-	$('[name="weekOccurrence"]').on('change', function(){
-		$('[name="weekOccurrence"]').val($(this).val());
-	});
-
-	$('[name="dayOfWeek"]').on('change', function(){
-		$('[name="dayOfWeek"]').val($(this).val());
-	});
-
-	$('[name="month"]').on('change', function(){
-		$('[name="month"]').val($(this).val());
-	});
-});
 
 (function($){
 	function jqCron(){
@@ -128,6 +44,13 @@ $(function(){
 				}
 			},
 			disableUiUpdates = false;
+
+		var hideAll	= function(){
+			$('#dailyOptions').hide();
+			$('#weeklyOptions').hide();
+			$('#monthlyOptions').hide();
+			$('#yearlyOptions').hide();		
+		};
 
 		this.reset = function(){
 			currentState = {
@@ -160,6 +83,61 @@ $(function(){
 		}
 
 		this.init = function(){
+			hideAll();
+			
+			$('select[name^="month"]').multipleSelect({
+				width: 260,
+				multiple: true,
+				multipleWidth: 120,
+				placeholder: 'Select months',
+				selectAll: false,
+				minimumCountSelected: 4,
+				ellipsis: true,
+				allSelected: 'Every month'
+			});
+
+			$('select[name="monthSpecificDay"]').on('change', function(){
+				var thisSelects = $(this).multipleSelect('getSelects');
+				var monthOccurrenceSelects = $('select[name="monthOccurrence"]').multipleSelect('getSelects');
+
+				//Check to see if they match - otherwise the updates get called recursively forever		
+				if (!($(thisSelects).not(monthOccurrenceSelects).length === 0 && $(monthOccurrenceSelects).not(thisSelects).length === 0)){
+					$('select[name="monthOccurrence"]').multipleSelect('setSelects', $(this).multipleSelect('getSelects'));
+				}
+			});
+
+			$('select[name="monthOccurrence"]').on('change', function(){
+				var thisSelects = $(this).multipleSelect('getSelects');
+				var specificDaySelects = $('select[name="monthSpecificDay"]').multipleSelect('getSelects');
+
+				//Check to see if they match - otherwise the updates get called recursively forever
+				if (!($(thisSelects).not(specificDaySelects).length === 0 && $(specificDaySelects).not(thisSelects).length === 0)){
+					$('select[name="monthSpecificDay"]').multipleSelect('setSelects', $(this).multipleSelect('getSelects'));
+				}
+			})
+
+			$('[name="ScheduleType"]').on('change', function(){
+				var scr = "#" + $(this).val() + "Options";
+				hideAll();
+				$(scr).show();
+			});
+
+			$('[name$="Frequency"]').on('change', function(){
+				$('[name$="Frequency"]').val($(this).val());
+			});
+
+			$('[name="weekOccurrence"]').on('change', function(){
+				$('[name="weekOccurrence"]').val($(this).val());
+			});
+
+			$('[name="dayOfWeek"]').on('change', function(){
+				$('[name="dayOfWeek"]').val($(this).val());
+			});
+
+			$('[name="month"]').on('change', function(){
+				$('[name="month"]').val($(this).val());
+			});
+
 			updateDom();
 			$('input,select').on('change', function(){
 				updateFromDom();				
@@ -518,13 +496,6 @@ $(function(){
 		catch(e){ 
 		}
 	}
+
 	this.jqCron = jqCron;	
 }).call(this, jQuery);
-
-
-
-
-/*$(function(){
-	a = new jqCron();
-	console.log(a.getCron());
-});*/
