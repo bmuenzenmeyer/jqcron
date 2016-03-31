@@ -101,6 +101,10 @@
 				return string.length < max ? pad("0" + string, max) : string;
 			}
 
+			if (!expression) {
+			    return;
+			}
+
 			//Model expression format: ss MM hh dd mm ww yyyy
 			var values = expression.split(' ');
 
