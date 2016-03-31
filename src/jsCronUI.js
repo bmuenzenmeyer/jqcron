@@ -1,20 +1,39 @@
 (function($){
-	$.fn.jsCronUI = function(settings = {}) {
-		
-		return this.each(function() {
-			var cron;
-			var $this = $(this);
+	$.fn.jsCronUI = function(settings) {
 
-			cron = new jsCronUI(settings, $this);
+		var value;
 
-			$(this).data('jsCronUI', cron);
-		});
-	};
-}).call(this, jQuery);
+	    if (!settings) {
+	        settings = {};
+	    }
 
-(function($){
-	$.fn.jsCronUIGetInstance = function() {
-		return this.data('jsCronUI');
+		if (typeof settings === 'string'){
+			//call method
+			var args = Array.prototype.slice.call(arguments, 1);
+
+			this.each(function(){
+				var instance = $.data(this, 'jsCronUI');
+				if (!instance){
+					throw 'Cannot call method ' + settings + ' on jsCronUI prior to initialization';
+				}
+				if (!$.isFunction(instance[settings]) || settings.charAt(0) === '_'){
+					throw 'No such method ' + settings;
+				}
+
+				value = instance[settings].apply(instance, args);
+			});
+		} else {
+			return this.each(function() {
+				var cron;
+				var $this = $(this);
+
+				cron = new jsCronUI(settings, $this);
+
+				$(this).data('jsCronUI', cron);
+			});
+		}
+
+		return typeof value !== 'undefined' ? value : this;
 	};
 }).call(this, jQuery);
 
