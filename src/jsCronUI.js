@@ -2,10 +2,6 @@
 	$.fn.jsCronUI = function (settings) {
 		var value;
 
-		//if (!settings) {
-		//    settings = {};
-		//}
-
 		if (typeof settings === 'string') {
 			//call method
 			var args = Array.prototype.slice.call(arguments, 1);
@@ -434,17 +430,9 @@
 			});
 		};
 
-		this.toEnglishString = function (template) {
+		this.toEnglishString = function () {
 		    var result = '';
 		    
-		    if (!template) {
-		        template = '<time>';
-		    }
-
-		    if (template.indexOf('<time>')) {
-		        return template;
-		    }
-
 			var toTimeString = function (val) {
 			    var time = val.trim().match(/^(\d{2})(?::)(\d{2})(?::)?(\d{2})?$/i);
 			    if (time === null) return null;
@@ -543,7 +531,7 @@
 					throw 'Not implemented: ' + currentState.pattern + '.toEnglishString';
 			}
             			
-			return template.replace('<time>', result);
+			return result;
 		};
 
 		try {
