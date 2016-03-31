@@ -78,7 +78,7 @@
 			disableUiUpdates = true;
 			updateDom();
 			disableUiUpdates = false;
-		}
+		};
 
 		this.init = function(){
 			//TODO: Find a more elegant way of injecting the DOM
@@ -92,7 +92,7 @@
 			self.$el.find('input,select').on('change', function(){
 				updateFromDom();
 			});
-		}
+		};
 
 		this.setCron = function(expression){
 			function pad(string, max){
@@ -319,7 +319,7 @@
 					self.$el.find('[name="weekOccurrence"]').val(currentState.yearlyOptions.occurrence).change();
 					break;
 			}
-		}
+		};
 
 		function updateFromDom(){
 			if (disableUiUpdates)
@@ -351,7 +351,7 @@
 					state.dayOfWeek = self.$el.find('[name="dayOfWeek"]').val();
 					break;
 			}
-		}
+		};
 
 		function hideAll(){
 			self.$el.find('.js-schedule-daily').hide();
@@ -415,7 +415,7 @@
 			self.$el.find('[name="month"]').on('change', function(){
 				self.$el.find('[name="month"]').val($(this).val());
 			});
-		}
+		};
 
 		this.toEnglishString = function(){
 			var result = '';
@@ -499,7 +499,7 @@
 			}
 
 			return result;
-		}
+		};
 
 		try{
 			this.init();
