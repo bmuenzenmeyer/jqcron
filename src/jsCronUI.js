@@ -1,25 +1,25 @@
 (function($){
-	$.fn.jqCron = function(settings = {}) {
+	$.fn.jsCronUI = function(settings = {}) {
 		
 		return this.each(function() {
 			var cron;
 			var $this = $(this);
 
-			cron = new jqCron(settings, $this);
+			cron = new jsCronUI(settings, $this);
 
-			$(this).data('jqCron', cron);
+			$(this).data('jsCronUI', cron);
 		});
 	};
 }).call(this, jQuery);
 
 (function($){
-	$.fn.jqCronGetInstance = function() {
-		return this.data('jqCron');
+	$.fn.jsCronUIGetInstance = function() {
+		return this.data('jsCronUI');
 	};
 }).call(this, jQuery);
 
 (function($){
-	function jqCron(settings, $element){
+	function jsCronUI(settings, $element){
 		//BM: pass this stuff in so you can wire up the handlers to $el inside init among other things
 		//console.log(settings);
 		//console.log($element);
@@ -508,5 +508,5 @@
 			console.log(e);
 		}
 	}
-	this.jqCron = jqCron;
+	this.jsCronUI = jsCronUI;
 }).call(this, jQuery);
