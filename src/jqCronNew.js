@@ -1,33 +1,12 @@
 (function($){
 	$.fn.jqCron = function(settings = {}) {
-		var saved_settings = settings;
-
+		
 		return this.each(function() {
-			var cron, saved;
+			var cron;
 			var $this = $(this);
 
-			// autoset bind_to if it is an input
-			if($this.is(':input')) {
-				settings.bind_to = settings.bind_to || $this;
-			}
+			cron = new jqCron(settings, $this);
 
-			// init cron object
-			if(settings.bind_to){
-				if(settings.bind_to.is(':input')) {
-					// auto bind from input to object if an input, textarea ...
-					//BM: This seems like an assumption that could be done later / by the caller
-					settings.bind_to.blur(function(){
-						var value = settings.bind_method.get(settings.bind_to);
-						$this.jqCronGetInstance().setCron(value);
-					});
-				}
-				saved = settings.bind_method.get(settings.bind_to);
-				cron = new jqCron(settings, $this);
-				cron.setCron(saved);
-			}
-			else {
-				cron = new jqCron(settings, $this);
-			}
 			$(this).data('jqCron', cron);
 		});
 	};
@@ -42,8 +21,8 @@
 (function($){
 	function jqCron(settings, $element){
 		//BM: pass this stuff in so you can wire up the handlers to $el inside init among other things
-		console.log(settings);
-		console.log($element);
+		//console.log(settings);
+		//console.log($element);
 		var self = this;
 		self.$el = $element;
 		var disableUiUpdates = false;
@@ -104,7 +83,7 @@
 		this.init = function(){
 			//TODO: Find a more elegant way of injecting the DOM
 			//Inject DOM
-			self.$el.append('<div class="c-schedule-type"><ul class="c-schedule-type-options"><li><input type="radio" value="daily" name="ScheduleType"/>Daily</li><li><input type="radio" value="weekly" name="ScheduleType"/>Weekly</li><li><input type="radio" value="monthly" name="ScheduleType"/>Monthly</li><li><input type="radio" value="yearly" name="ScheduleType"/>Yearly</li></ul></div><div class="c-schedule-options" style="display: none;"><div id="timeOfDayOptions" class="js-schedule-tod"><label> Time<input type="time" name="time" /></label></div></div><div id="dailyOptions" class="js-schedule-daily"><div><input type="radio" value="daily" name="dailyPattern" />Every day</div><div><input type="radio" value="weekday" name="dailyPattern" />Every weekday</div></div><div id="weeklyOptions" class="js-schedule-weekly"><div>Recur every week on:<br/><span><input type="checkbox" value="1" name="weeklyDays" />Sunday</span><span><input type="checkbox" value="2" name="weeklyDays" />Monday</span><span><input type="checkbox" value="3" name="weeklyDays" />Tuesday</span><span><input type="checkbox" value="4" name="weeklyDays" />Wednesday</span><span><input type="checkbox" value="5" name="weeklyDays" />Thursday</span><span><input type="checkbox" value="6" name="weeklyDays" />Friday</span><span><input type="checkbox" value="7" name="weeklyDays" />Saturday</span></div></div><div id="monthlyOptions" class="js-schedule-monthly"><div><input type="radio" value="date" name="monthlyPattern" />Day(s) <input name="date" /> of every month<br/></div><div><input type="radio" value="last" name="monthlyPattern" />The last day of the month.</div><div><input type="radio" value="week" name="monthlyPattern" />The<select name="weekOccurrence"><option value="#1">First</option><option value="#2">Second</option><option value="#3">Third</option><option value="#4">Fourth</option><option value="#5">Fifth</option><option value="L">Last</option></select><select name="dayOfWeek"><option value="1">Sunday</option><option value="2">Monday</option><option value="3">Tuesday</option><option value="4">Wednesday</option><option value="5">Thursday</option><option value="6">Friday</option><option value="7">Saturday</option></select> of every month.</div></div><div id="yearlyOptions" js-schedule-yearly><div>Recur every year</div><div><input type="radio" name="yearPattern" value="specificDay"/>On:<select multiple name="monthSpecificDay"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select><input name="dayOfMonth" /></div><div><input type="radio" name="yearPattern" value="weekOccurrence" />On the:<select name="weekOccurrence"><option value="#1">First</option><option value="#2">Second</option><option value="#3">Third</option><option value="#4">Fourth</option><option value="#5">Fifth</option><option value="L">Last</option></select><select name="dayOfWeek"><option value="1">Sunday</option><option value="2">Monday</option><option value="3">Tuesday</option><option value="4">Wednesday</option><option value="5">Thursday</option><option value="6">Friday</option><option value="7">Saturday</option></select> of<select multiple name="monthOccurrence"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div></div>');
+			self.$el.append('<div class="c-schedule-type"><ul class="c-schedule-type-options"><li><input type="radio" value="daily" name="ScheduleType"/>Daily</li><li><input type="radio" value="weekly" name="ScheduleType"/>Weekly</li><li><input type="radio" value="monthly" name="ScheduleType"/>Monthly</li><li><input type="radio" value="yearly" name="ScheduleType"/>Yearly</li></ul></div><div class="c-schedule-options" style="display: none;"><div class="js-schedule-tod"><label> Time<input type="time" name="time" /></label></div></div><div class="js-schedule-daily"><div><input type="radio" value="daily" name="dailyPattern" />Every day</div><div><input type="radio" value="weekday" name="dailyPattern" />Every weekday</div></div><div class="js-schedule-weekly"><div>Recur every week on:<br/><span><input type="checkbox" value="1" name="weeklyDays" />Sunday</span><span><input type="checkbox" value="2" name="weeklyDays" />Monday</span><span><input type="checkbox" value="3" name="weeklyDays" />Tuesday</span><span><input type="checkbox" value="4" name="weeklyDays" />Wednesday</span><span><input type="checkbox" value="5" name="weeklyDays" />Thursday</span><span><input type="checkbox" value="6" name="weeklyDays" />Friday</span><span><input type="checkbox" value="7" name="weeklyDays" />Saturday</span></div></div><div class="js-schedule-monthly"><div><input type="radio" value="date" name="monthlyPattern" />Day(s) <input name="date" /> of every month<br/></div><div><input type="radio" value="last" name="monthlyPattern" />The last day of the month.</div><div><input type="radio" value="week" name="monthlyPattern" />The<select name="weekOccurrence"><option value="#1">First</option><option value="#2">Second</option><option value="#3">Third</option><option value="#4">Fourth</option><option value="#5">Fifth</option><option value="L">Last</option></select><select name="dayOfWeek"><option value="1">Sunday</option><option value="2">Monday</option><option value="3">Tuesday</option><option value="4">Wednesday</option><option value="5">Thursday</option><option value="6">Friday</option><option value="7">Saturday</option></select> of every month.</div></div><div class="js-schedule-yearly"><div>Recur every year</div><div><input type="radio" name="yearPattern" value="specificDay"/>On:<select multiple name="monthSpecificDay"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select><input name="dayOfMonth" /></div><div><input type="radio" name="yearPattern" value="weekOccurrence" />On the:<select name="weekOccurrence"><option value="#1">First</option><option value="#2">Second</option><option value="#3">Third</option><option value="#4">Fourth</option><option value="#5">Fifth</option><option value="L">Last</option></select><select name="dayOfWeek"><option value="1">Sunday</option><option value="2">Monday</option><option value="3">Tuesday</option><option value="4">Wednesday</option><option value="5">Thursday</option><option value="6">Friday</option><option value="7">Saturday</option></select> of<select multiple name="monthOccurrence"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div></div>');
 
 			wireEvents();
 
@@ -375,11 +354,10 @@
 		}
 
 		function hideAll(){
-			//BM: convert these to their js equivalents. make sure you handle that autogenned #ID too
-			self.$el.find('#dailyOptions').hide();
-			self.$el.find('#weeklyOptions').hide();
-			self.$el.find('#monthlyOptions').hide();
-			self.$el.find('#yearlyOptions').hide();
+			self.$el.find('.js-schedule-daily').hide();
+			self.$el.find('.js-schedule-weekly').hide();
+			self.$el.find('.js-schedule-monthly').hide();
+			self.$el.find('.js-schedule-yearly').hide();
 		};
 
 		function wireEvents() {
@@ -416,7 +394,7 @@
 
 			self.$el.find('[name="ScheduleType"]').on('change', function(){
 				self.$el.find('.c-schedule-options').show();
-				var scr = "#" + $(this).val() + "Options";
+				var scr = '.js-schedule-' + $(this).val();
 				hideAll();
 				self.$el.find(scr).show();
 			});
