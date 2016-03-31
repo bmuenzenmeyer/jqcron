@@ -434,8 +434,16 @@
 			});
 		};
 
-		this.toEnglishString = function () {
-			var result = '';
+		this.toEnglishString = function (template) {
+		    var result = '';
+		    
+		    if (!template) {
+		        template = '<time>';
+		    }
+
+		    if (template.indexOf('<time>')) {
+		        return template;
+		    }
 
 			var toTimeString = function (val) {
 			    var time = val.trim().match(/^(\d{2})(?::)(\d{2})(?::)?(\d{2})?$/i);
@@ -534,8 +542,8 @@
 				default:
 					throw 'Not implemented: ' + currentState.pattern + '.toEnglishString';
 			}
-
-			return result;
+            			
+			return template.replace('<time>', result);
 		};
 
 		try {
