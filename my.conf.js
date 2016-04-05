@@ -19,8 +19,7 @@ module.exports = function(config) {
       'test/lib/jasmine-2.4.1/jasmine.js',
       'test/lib/jasmine-2.4.1/jasmine-html.js',
       'test/lib/jasmine-2.4.1/boot.js',
-      'src/jqCron.js',
-      'src/jqCron.en.js',
+      'src/jsCronUI.js',
       'test/spec/*.js'
     ],
 
