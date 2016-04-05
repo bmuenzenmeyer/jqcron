@@ -1,4 +1,5 @@
 (function ($) {
+
 	$.fn.jsCronUI = function (settings) {
 		var value;
 
@@ -9,10 +10,10 @@
 			this.each(function () {
 				var instance = $.data(this, 'jsCronUI');
 				if (!instance) {
-					throw 'Cannot call method ' + settings + ' on jsCronUI prior to initialization';
+					throw new CronError(10, 'Cannot call method ' + settings + ' on jsCronUI prior to initialization');
 				}
 				if (!$.isFunction(instance[settings]) || settings.charAt(0) === '_') {
-					throw 'No such method ' + settings;
+					throw new CronError(20, 'No such method ' + settings);
 				}
 				value = instance[settings].apply(instance, args);
 			});
@@ -31,13 +32,25 @@
 }).call(this, jQuery);
 
 (function ($) {
+
+	function CronError(number, message, additionalData) {
+		this.number = number;
+		this.message = message;
+		this.data = additionalData;
+		this.stack = (new Error()).stack;
+	}
+	CronError.prototype = Object.create(Error.prototype);
+	CronError.prototype.constructor = CronError;
+
 	function jsCronUI(settings, $element) {
 		var self = this;
 		self.$el = $element;
+		self.$bindTo = settings.bindTo || null;
+		self.initialValue = settings.initialValue;
 		var disableUiUpdates = false;
 		var currentState = {
-			time: '12:00',
-			pattern: 'monthly',
+			time: '',
+			pattern: '',
 			dailyOptions: {
 				selected: ''
 			},
@@ -61,8 +74,8 @@
 
 		this.reset = function () {
 			currentState = {
-				time: '12:00',
-				pattern: 'monthly',
+				time: '',
+				pattern: '',
 				dailyOptions: {
 					selected: ''
 				},
@@ -85,20 +98,34 @@
 			};
 
 			disableUiUpdates = true;
-			updateDom();
+			resetDom();
 			disableUiUpdates = false;
 		};
 
+		function resetDom() {
+			self.$el.find('input:radio,input:checkbox').prop('checked', false).change();
+			self.$el.find('input:text').val('').change();
+			hideAll();
+			self.$el.find('.c-schedule-options').hide();
+
+			updateDom();
+		}
+
 		this.init = function () {
 
-			if (!settings.bind_to || !settings.bind_to instanceof jQuery) {
-				self.$el.append('<div class="c-schedule-type"><ul class="c-schedule-type-options"><li><input type="radio" value="daily" name="ScheduleType"/>Daily</li><li><input type="radio" value="weekly" name="ScheduleType"/>Weekly</li><li><input type="radio" value="monthly" name="ScheduleType"/>Monthly</li><li><input type="radio" value="yearly" name="ScheduleType"/>Yearly</li></ul></div><div class="c-schedule-options" style="display: none;"><div class="js-schedule-tod"><label> Time<input type="time" name="time" /></label></div></div><div class="js-schedule-daily"><div><input type="radio" value="daily" name="dailyPattern" />Every day</div><div><input type="radio" value="weekday" name="dailyPattern" />Every weekday</div></div><div class="js-schedule-weekly"><div>Recur every week on:<br/><span><input type="checkbox" value="1" name="weeklyDays" />Sunday</span><span><input type="checkbox" value="2" name="weeklyDays" />Monday</span><span><input type="checkbox" value="3" name="weeklyDays" />Tuesday</span><span><input type="checkbox" value="4" name="weeklyDays" />Wednesday</span><span><input type="checkbox" value="5" name="weeklyDays" />Thursday</span><span><input type="checkbox" value="6" name="weeklyDays" />Friday</span><span><input type="checkbox" value="7" name="weeklyDays" />Saturday</span></div></div><div class="js-schedule-monthly"><div><input type="radio" value="date" name="monthlyPattern" />Day(s) <input name="date" /> of every month<br/></div><div><input type="radio" value="last" name="monthlyPattern" />The last day of the month.</div><div><input type="radio" value="week" name="monthlyPattern" />The<select name="weekOccurrence"><option value="#1">First</option><option value="#2">Second</option><option value="#3">Third</option><option value="#4">Fourth</option><option value="#5">Fifth</option><option value="L">Last</option></select><select name="dayOfWeek"><option value="1">Sunday</option><option value="2">Monday</option><option value="3">Tuesday</option><option value="4">Wednesday</option><option value="5">Thursday</option><option value="6">Friday</option><option value="7">Saturday</option></select> of every month.</div></div><div class="js-schedule-yearly"><div>Recur every year</div><div><input type="radio" name="yearPattern" value="specificDay"/>On:<select multiple name="monthSpecificDay"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select><input name="dayOfMonth" /></div><div><input type="radio" name="yearPattern" value="weekOccurrence" />On the:<select name="weekOccurrence"><option value="#1">First</option><option value="#2">Second</option><option value="#3">Third</option><option value="#4">Fourth</option><option value="#5">Fifth</option><option value="L">Last</option></select><select name="dayOfWeek"><option value="1">Sunday</option><option value="2">Monday</option><option value="3">Tuesday</option><option value="4">Wednesday</option><option value="5">Thursday</option><option value="6">Friday</option><option value="7">Saturday</option></select> of<select multiple name="monthOccurrence"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div></div>');
+			if (!settings.container || !settings.container instanceof jQuery) {
+				self.$el.append('<div class="c-schedule-type"><ul class="c-schedule-type-options"><li><input type="radio" value="daily" name="ScheduleType"/>Daily</li><li><input type="radio" value="weekly" name="ScheduleType"/>Weekly</li><li><input type="radio" value="monthly" name="ScheduleType"/>Monthly</li><li><input type="radio" value="yearly" name="ScheduleType"/>Yearly</li></ul></div><div class="c-schedule-options" style="display: none;"><div class="js-schedule-tod"><label> Time<input type="time" name="time" /></label></div></div><div class="js-schedule-daily"><div><input type="radio" value="daily" name="dailyPattern" />Every day</div><div><input type="radio" value="weekday" name="dailyPattern" />Every weekday</div></div><div class="js-schedule-weekly" name="weeklyDays"><div>Recur every week on:<br/><span><input type="checkbox" value="1" />Sunday</span><span><input type="checkbox" value="2" />Monday</span><span><input type="checkbox" value="3" />Tuesday</span><span><input type="checkbox" value="4" />Wednesday</span><span><input type="checkbox" value="5" />Thursday</span><span><input type="checkbox" value="6" />Friday</span><span><input type="checkbox" value="7" />Saturday</span></div></div><div class="js-schedule-monthly"><div><input type="radio" value="date" name="monthlyPattern" />Day(s) <input name="date" /> of every month<br/></div><div><input type="radio" value="last" name="monthlyPattern" />The last day of the month.</div><div><input type="radio" value="week" name="monthlyPattern" />The<select name="weekOccurrence"><option value="#1">First</option><option value="#2">Second</option><option value="#3">Third</option><option value="#4">Fourth</option><option value="#5">Fifth</option><option value="L">Last</option></select><select name="dayOfWeek"><option value="1">Sunday</option><option value="2">Monday</option><option value="3">Tuesday</option><option value="4">Wednesday</option><option value="5">Thursday</option><option value="6">Friday</option><option value="7">Saturday</option></select> of every month.</div></div><div class="js-schedule-yearly"><div>Recur every year</div><div><input type="radio" name="yearPattern" value="specificDay"/>On:<select multiple name="monthSpecificDay"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select><input name="dayOfMonth" /></div><div><input type="radio" name="yearPattern" value="weekOccurrence" />On the:<select name="weekOccurrence"><option value="#1">First</option><option value="#2">Second</option><option value="#3">Third</option><option value="#4">Fourth</option><option value="#5">Fifth</option><option value="L">Last</option></select><select name="dayOfWeek"><option value="1">Sunday</option><option value="2">Monday</option><option value="3">Tuesday</option><option value="4">Wednesday</option><option value="5">Thursday</option><option value="6">Friday</option><option value="7">Saturday</option></select> of<select multiple name="monthOccurrence"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div></div>');
 			}
 
 			wireEvents();
+
+			if (self.$bindTo && self.$bindTo instanceof jQuery && self.initialValue) {
+				self.setCron(self.initialValue);
+			}
+
 			updateDom();
 
-			self.$el.find('input,select').on('change', function () {
+			self.$el.find('div input,select').on('change', function () {
 				updateFromDom();
 			});
 		};
@@ -122,7 +149,7 @@
 			}
 
 			if (values.length != 7) {
-				throw "Invalid Cron: " + expression;
+				throw new CronError(30, "Could not load schedule with expression: " + expression);
 			}
 
 			//reset model to default values
@@ -150,7 +177,7 @@
 					state.occurrence = '#' + occArr[1];
 				}
 				else {
-					throw "Unrecognized yearly cron pattern: " + expression;
+					throw new CronError(40, 'Could not understand yearly schedule options. ' + expression);
 				}
 			}
 			else if (values[3] == '*' || values[5] == '*') {
@@ -222,20 +249,14 @@
 			disableUiUpdates = false;
 		};
 
-		this.getCron = function () {
-            var minute = '*',
-            hour = '*',
-            dayOfMonth = '*',
-            month = '*',
-            year = '*',
-            dayOfWeek = '?';
-
-			if (currentState.time != '') {
-				var timeArr = currentState.time.split(':');
-				hour = parseInt(timeArr[0]) + "";
-				minute = parseInt(timeArr[1]) + "";
-			}
-
+		this.getCron = function (validate) {
+			var minute = '*',
+			hour = '*',
+			dayOfMonth = '*',
+			month = '*',
+			year = '*',
+			dayOfWeek = '?';
+			
 			switch (currentState.pattern) {
 				case 'daily':
 					var state = currentState.dailyOptions;
@@ -248,11 +269,16 @@
 							dayOfMonth = '?';
 							break;
 						default:
-							throw 'Unknown daily state: ' + state.selected;
+							if (validate) {
+								throw new CronError(50, 'A daily selection is required.', state.selected);
+							}
 					}
 					break;
 				case 'weekly':
 					dayOfWeek = currentState.weeklyOptions.days.join(',');
+					if (validate && !dayOfWeek) {
+						throw new CronError(55, 'A day of week selection is required.', currentState.pattern);
+					}
 					dayOfMonth = '?';
 					break;
 				case 'monthly':
@@ -269,7 +295,9 @@
 							dayOfWeek = state.dayOfWeek + state.occurrence;
 							break;
 						default:
-							throw 'Unknown monthly state: ' + state.selected;
+							if (validate) {
+								throw new CronError(60, 'A date or day of week selection is required.', state.selected);
+							}
 					}
 					break;
 				case 'yearly':
@@ -285,12 +313,26 @@
 							dayOfWeek = state.dayOfWeek + state.occurrence;
 							break;
 						default:
-							throw 'Unknown yearly state: ' + state.selected;
+							if (validate) {
+								throw new CronError(70, 'A month and date or day of week selection is required.', state.selected);
+							}
 					}
 					break;
 				default:
-					throw 'Unknown internal state: ' + currentState.pattern;
+					if (validate) {
+						throw new CronError(80, 'A schedule type is required.', currentState.pattern);
+					}
 					break;
+			}
+
+			if (currentState.time != '') {
+				var timeArr = currentState.time.split(':');
+				hour = parseInt(timeArr[0]) + "";
+				minute = parseInt(timeArr[1]) + "";
+			} else {
+				if (validate) {
+					throw new CronError(45, 'A time is required.');
+				}
 			}
 
 			var cron = ['0', minute, hour, dayOfMonth, month, dayOfWeek, year]; //Default state = every minute
@@ -306,7 +348,7 @@
 		};
 
 		function updateDom() {
-			self.$el.find('[name="ScheduleType"][value="' + currentState.pattern + '"]').prop('checked', true).change();
+			self.$el.find('.c-schedule-type input:radio[value="' + currentState.pattern + '"]').prop('checked', true).change();
 			self.$el.find('[name="time"]').val(currentState.time).change();
 
 			switch (currentState.pattern) {
@@ -315,7 +357,7 @@
 					break;
 				case 'weekly':
 					$.each(currentState.weeklyOptions.days, function () {
-						self.$el.find('[name="weeklyDays"][value="' + this + '"]').prop('checked', true).change();
+						self.$el.find('[name="weeklyDays"] input:checkbox[value="' + this + '"]').prop('checked', true).change();
 					});
 					break;
 				case 'monthly':
@@ -335,8 +377,9 @@
 		};
 
 		function updateFromDom() {
-			if (disableUiUpdates)
+			if (disableUiUpdates) {
 				return;
+			}
 
 			currentState.pattern = self.$el.find('[name="ScheduleType"]:checked').val();
 			currentState.time = self.$el.find('[name="time"]').val();
@@ -346,7 +389,7 @@
 					currentState.dailyOptions.selected = self.$el.find('[name="dailyPattern"]:checked').val();
 					break;
 				case 'weekly':
-					currentState.weeklyOptions.days = self.$el.find('[name="weeklyDays"]:checkbox:checked').map(function () { return this.value; }).get();
+					currentState.weeklyOptions.days = self.$el.find('[name="weeklyDays"] input:checkbox:checked').map(function () { return this.value; }).get();
 					break;
 				case 'monthly':
 					var state = currentState.monthlyOptions;
@@ -363,6 +406,10 @@
 					state.occurrence = self.$el.find('[name="weekOccurrence"]').val();
 					state.dayOfWeek = self.$el.find('[name="dayOfWeek"]').val();
 					break;
+			}
+
+			if (self.$bindTo && self.$bindTo.val() !== self.getCron()) {
+				self.$bindTo.val(self.getCron()).change();
 			}
 		};
 
@@ -431,24 +478,24 @@
 		};
 
 		this.toEnglishString = function () {
-		    var result = '';
-		    
+			var result = '';
+
 			var toTimeString = function (val) {
-			    var time = val.trim().match(/^(\d{2})(?::)(\d{2})(?::)?(\d{2})?$/i);
-			    if (time === null) return null;
+				var time = val.trim().match(/^(\d{2})(?::)(\d{2})(?::)?(\d{2})?$/i);
+				if (time === null) return null;
 
-			    var hours = Number(time[1]);
-			    var minutes = Number(time[2]);
-			    var ampm = 'am';
+				var hours = Number(time[1]);
+				var minutes = Number(time[2]);
+				var ampm = 'am';
 
-			    if (hours >= 12) {
-			        ampm = 'pm';
-			        hours = hours === 12 ? 12 : hours - 12;
-			    }
-			    if (hours === 0)
-			        hours = 12;
+				if (hours >= 12) {
+					ampm = 'pm';
+					hours = hours === 12 ? 12 : hours - 12;
+				}
+				if (hours === 0)
+					hours = 12;
 
-			    return hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ' ' + ampm.toUpperCase();
+				return hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ' ' + ampm.toUpperCase();
 			}
 
 			var timeString = toTimeString(currentState.time);
@@ -483,17 +530,17 @@
 
 			switch (currentState.pattern) {
 				case 'daily':
-				    result = "Every " + (currentState.dailyOptions.selected == 'weekday' ? 'week' : '') + "day at " + timeString;
+					result = "Every " + (currentState.dailyOptions.selected == 'weekday' ? 'week' : '') + "day at " + timeString;
 					break;
 				case 'weekly':
-				    result = "Every week on " + toEnglishDays(currentState.weeklyOptions.days).join(', ') + " at " + timeString;
+					result = "Every week on " + toEnglishDays(currentState.weeklyOptions.days).join(', ') + " at " + timeString;
 					break;
 				case 'monthly':
 					var state = currentState.monthlyOptions;
 					result = 'Every month on the ';
 					switch (state.selected) {
 						case 'date':
-						    result += state.days.join(', ') + " at " + timeString;
+							result += state.days.join(', ') + " at " + timeString;
 							break;
 						case 'week':
 							if (state.occurrence != '') {
@@ -507,30 +554,30 @@
 							}
 							break;
 						case 'last':
-						    result += "last day of the month at " + timeString;
+							result += "last day of the month at " + timeString;
 							break;
 						default:
-							throw 'Not implemented: Monthly.' + state.selected + '.toEnglishString';
+							throw new CronError(90, 'Not implemented: Monthly.' + state.selected + '.toEnglishString');
 					}
 					break;
 				case 'yearly':
 					var state = currentState.yearlyOptions;
 					switch (state.selected) {
 						case 'specificDay':
-						    result = "Every year on " + toEnglishMonths(state.months).join(', ') + " " + state.days.join(', ') + " at " + timeString;
+							result = "Every year on " + toEnglishMonths(state.months).join(', ') + " " + state.days.join(', ') + " at " + timeString;
 							break;
 						case 'weekOccurrence':
-						    result = "Every year on the " + toEnglishOccurrence(state.occurrence.split('#')).join('') + " " + toEnglishDays(state.dayOfWeek).join('') + " of " + toEnglishMonths(state.months).join(', ') + " at " + timeString;
+							result = "Every year on the " + toEnglishOccurrence(state.occurrence.split('#')).join('') + " " + toEnglishDays(state.dayOfWeek).join('') + " of " + toEnglishMonths(state.months).join(', ') + " at " + timeString;
 							break;
 						default:
-							throw 'Not implemented: Yearly.' + state.selected + '.toEnglishString';
+							throw new CronError(100, 'Not implemented: Yearly.' + state.selected + '.toEnglishString');
 					}
 
 					break;
 				default:
-					throw 'Not implemented: ' + currentState.pattern + '.toEnglishString';
+					throw new CronError(110, 'Not implemented: ' + currentState.pattern + '.toEnglishString');
 			}
-            			
+
 			return result;
 		};
 
@@ -538,7 +585,8 @@
 			this.init();
 		}
 		catch (e) {
-			console.log(e);
+			console.error(e);
+			throw new CronError(120, 'Unknown error occurred inside jsCronUI library ' + e.message);
 		}
 	}
 	this.jsCronUI = jsCronUI;

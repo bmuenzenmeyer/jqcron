@@ -226,11 +226,11 @@ describe("jsCronUI", function(){
 
             $('#Schedule [name="ScheduleType"][value="weekly"]').click();
             $('#Schedule .js-schedule-tod [name="time"]').val("10:20").change();
-            $('#Schedule .js-schedule-weekly input[name="weeklyDays"][value="1"]').click();
-            $('#Schedule .js-schedule-weekly input[name="weeklyDays"][value="2"]').click();
-            $('#Schedule .js-schedule-weekly input[name="weeklyDays"][value="3"]').click();
-            $('#Schedule .js-schedule-weekly input[name="weeklyDays"][value="4"]').click();
-            $('#Schedule .js-schedule-weekly input[name="weeklyDays"][value="5"]').click();
+            $('#Schedule .js-schedule-weekly input[value="1"]').click();
+            $('#Schedule .js-schedule-weekly input[value="2"]').click();
+            $('#Schedule .js-schedule-weekly input[value="3"]').click();
+            $('#Schedule .js-schedule-weekly input[value="4"]').click();
+            $('#Schedule .js-schedule-weekly input[value="5"]').click();
 
             expect($('#Schedule').jsCronUI('getCron')).toEqual(cronExp);    
             expect($('#Schedule').jsCronUI('toEnglishString')).toEqual(englishString);
