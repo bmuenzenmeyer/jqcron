@@ -16,9 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'test/lib/jquery-1.7.2.min.js',
-      'test/lib/jasmine-2.4.1/jasmine.js',
-      'test/lib/jasmine-2.4.1/jasmine-html.js',
-      'test/lib/jasmine-2.4.1/boot.js',
+      'node_modules/multiple-select/multiple-select.js',
       'src/jsCronUI.js',
       'test/spec/*.js'
     ],
@@ -60,7 +58,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Firefox', 'Chrome'],
+    browsers: ['Firefox'],
 
 
     // Continuous Integration mode
