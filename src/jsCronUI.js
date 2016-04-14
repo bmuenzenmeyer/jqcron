@@ -75,6 +75,7 @@
 		self.$bindTo = settings.bindTo || null;
 		self.initialValue = settings.initialValue;
 		var disableUiUpdates = false;
+		//TODO: Consolidate currentState into an easier to understand model (no nested objects)
 		var currentState = {
 			time: '',
 			pattern: '',
@@ -142,6 +143,7 @@
 
 		this.init = function () {
 
+			//TODO: See if we can extract the HTML injection to a model that is easier to change around
 			if (!settings.container || !settings.container instanceof jQuery) {
 				self.$el.append('<div class="c-schedule js-cron"><input class="visuallyHidden" data-bind="cronSchedule"/><div class="c-schedule-type"><ul class="c-schedule-type-options no-list-style"><li><label class="o-form-element"><input type="radio" value="daily" name="ScheduleType" tabindex="30" /><span class="o-form-label-text_inline">Daily</span></label></li><li><label class="o-form-element"><input type="radio" value="weekly" name="ScheduleType" tabindex="30" /><span class="o-form-label-text_inline">Weekly</span></label></li><li><label class="o-form-element"><input type="radio" value="monthly" name="ScheduleType" tabindex="30" /><span class="o-form-label-text_inline">Monthly</span></label></li><li><label class="o-form-element"><input type="radio" value="yearly" name="ScheduleType" tabindex="30" /><span class="o-form-label-text_inline">Yearly</span></label></li></ul></div><div class="c-schedule-options o-form" style="display: none;"><div class="js-schedule-tod o-flex"><label class="o-flex-col o-flex-to-content o-form-element"><div class="o-form-label-text">Time<span class="o-form-element-help o-tooltip o-tooltip_north o-toolip_offset-right"><i class="icon icon-exclamation-circle"></i></span></div><input type="text" name="time" tabindex="30" /></label><label class="o-flex-col o-flex-to-content o-form-element"><div class="o-form-label-text">Timezone<span class="o-form-element-help o-tooltip o-tooltip_north o-toolip_offset-right"><i class="icon icon-exclamation-circle"></i></span></div><select data-bind="timezone" tabindex="30"></select></label></div><div class="js-schedule-daily o-flex-col">Repeat every:<div><label class="o-form-element"><input type="radio" value="daily" name="dailyPattern" tabindex="30" /><span class="o-form-label-text_inline">day</span></label></div><div><label class="o-form-element"><input type="radio" value="weekday" name="dailyPattern" tabindex="30" /><span class="o-form-label-text_inline">weekday</span></label></div></div><div class="js-schedule-weekly o-flex-col">Repeat every week on:<div class="o-flex o-flex-wrap" name="weeklyDays"><label class="o-form-element"><input type="checkbox" value="1" tabindex="30" /><span class="o-form-label-text_inline">Sunday</span></label><label class="o-form-element"><input type="checkbox" value="2" tabindex="30" /><span class="o-form-label-text_inline">Monday</span></label><label class="o-form-element"><input type="checkbox" value="3" tabindex="30" /><span class="o-form-label-text_inline">Tuesday</span></label><label class="o-form-element"><input type="checkbox" value="4" tabindex="30" /><span class="o-form-label-text_inline">Wednesday</span></label><label class="o-form-element"><input type="checkbox" value="5" tabindex="30" /><span class="o-form-label-text_inline">Thursday</span></label><label class="o-form-element"><input type="checkbox" value="6" tabindex="30" /><span class="o-form-label-text_inline">Friday</span></label><label class="o-form-element"><input type="checkbox" value="7" tabindex="30" /><span class="o-form-label-text_inline">Saturday</span></label></div></div><div class="js-schedule-monthly o-flex-col">Repeat every month:<div><label class="o-form-element"><input type="radio" value="last" name="monthlyPattern" tabindex="30" /><span class="o-form-label-text_inline">on last day of the month</span></label></div><div><label class="o-form-element"><input type="radio" value="week" name="monthlyPattern" tabindex="30"/><span class="o-form-label-text_inline">on the</span><select name="weekOccurrence" class="o-form-label-text_inline" tabindex="30"><option value="#1">First</option><option value="#2">Second</option><option value="#3">Third</option><option value="#4">Fourth</option><option value="#5">Fifth</option><option value="L">Last</option></select><select name="dayOfWeek" class="o-form-label-text_inline" tabindex="30"><option value="1">Sunday</option><option value="2">Monday</option><option value="3">Tuesday</option><option value="4">Wednesday</option><option value="5">Thursday</option><option value="6">Friday</option><option value="7">Saturday</option></select><span class="o-form-label-text_inline">of every month</span></label></div><div><label class="o-form-element"><input type="radio" value="date" name="monthlyPattern" tabindex="30" /><span class="o-form-label-text_inline">on these days</span><input name="date" class="o-form-label-text_inline" tabindex="30"/></label></div></div><div class="js-schedule-yearly">Repeat every year:<div><label class="o-form-element"><input type="radio" name="yearPattern" value="specificDay" tabindex="30"/><span class="o-form-label-text_inline">on </span><select multiple name="monthSpecificDay" class="o-form-label-text_inline" tabindex="30"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select><span class="o-form-label-text_inline">dates </span><input name="dayOfMonth" class="o-form-label-text_inline" tabindex="30"/></label></div><div><label class="o-form-element"><input type="radio" name="yearPattern" value="weekOccurrence" tabindex="30"/><span class="o-form-label-text_inline">on the </span><select name="weekOccurrence" class="o-form-element_inline" tabindex="30"><option value="#1">First</option><option value="#2">Second</option><option value="#3">Third</option><option value="#4">Fourth</option><option value="#5">Fifth</option><option value="L">Last</option></select><select name="dayOfWeek" class="o-form-element_inline" tabindex="30"><option value="1">Sunday</option><option value="2">Monday</option><option value="3">Tuesday</option><option value="4">Wednesday</option><option value="5">Thursday</option><option value="6">Friday</option><option value="7">Saturday</option></select><span class="o-form-label-text_inline">of </span><select multiple name="monthOccurrence" tabindex="30"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></label></div></div></div></div>');
 			}
@@ -471,6 +473,7 @@
 			return true;
 		};
 
+		//TODO: Extract the time input to it's own file/project (if desired)
 		function stringToTimeSpan(val) {
 			if (!val) return undefined;
 
@@ -612,6 +615,8 @@
 		};
 
 		function wireEvents() {
+			//TODO: See if there is an easier way to wire the events needed
+			//TODO: Determine if there is a way to decouple multipleSelect
 			self.$el.find('select[name^="month"]').multipleSelect({
 				width: 230,
 				multiple: true,
@@ -707,6 +712,7 @@
 				return $.makeArray(res);
 			}
 
+			//TODO: extract text values to config options to allow for customization and/or localization
 			var toEnglishDays = function (values) {
 				var dayList = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
