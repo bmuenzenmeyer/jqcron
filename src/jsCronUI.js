@@ -1,7 +1,7 @@
 (function ($) {
 
 	$.fn.jsCronUI = function (settings) {
-		var value; 
+		var value;
 
 		if (typeof settings === 'string') {
 			//call method
@@ -202,13 +202,12 @@
 				else if (values[5].indexOf('#') > 0) {
 					//Specific occurrence of the month
 					state.selected = 'weekOccurrence';
-
 					var occArr = values[5].split('#');
 
 					state.dayOfWeek = occArr[0];
-					state.occurrence = '#' + occArr[1];				
+					state.occurrence = '#' + occArr[1];
 				}
-				else if (values[5].indexOf('L') > 0){
+				else if (values[5].indexOf('L') > 0) {
 					//Specific occurrence of the month
 					state.selected = 'weekOccurrence';
 
@@ -296,7 +295,7 @@
 			year = '*',
 			dayOfWeek = '?',
 			state;
-			
+
 			switch (currentState.pattern) {
 				case 'daily':
 					state = currentState.dailyOptions;
@@ -588,7 +587,7 @@
 					currentState.dailyOptions.selected = self.$el.find('[name="dailyPattern"]:checked').val();
 					break;
 				case 'weekly':
-					currentState.weeklyOptions.days = self.$el.find('[name="weeklyDays"] input:checkbox:checked').map(function () { return this.value; }).get();
+					currentState.weeklyOptions.days = self.$el.find('input:checkbox[name="weeklyDays"]:checked').map(function () { return this.value; }).get();
 					break;
 				case 'monthly':
 					state = currentState.monthlyOptions;
@@ -641,7 +640,7 @@
 				}
 			});
 
-			self.$el.find('select[name="monthOccurrence"]').on('change', function() {
+			self.$el.find('select[name="monthOccurrence"]').on('change', function () {
 				var thisSelects = $(this).multipleSelect('getSelects');
 				var specificDaySelects = self.$el.find('select[name="monthSpecificDay"]').multipleSelect('getSelects');
 
@@ -728,7 +727,7 @@
 			};
 
 			var toEnglishOccurrence = function (values) {
-				var occurrenceList = ['first', 'second', 'third', 'fourth', 'fifth', 'last'];
+				var occurrenceList = ['first', 'second', 'third', 'fourth', 'fifth'];
 
 				return toAltValues(occurrenceList, values);
 			};
@@ -774,7 +773,7 @@
 							break;
 						case 'weekOccurrence':
 							result += 'the '
-							if (state.occurrence === 'L'){
+							if (state.occurrence === 'L') {
 								result += 'last ';
 							} else {
 								result += toEnglishOccurrence(state.occurrence.split('#')).join('') + ' ';
