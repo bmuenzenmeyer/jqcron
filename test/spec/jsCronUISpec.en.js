@@ -192,6 +192,15 @@ describe("jsCronUI", function(){
 
             expect($fixture.jsCronUI('toEnglishString')).toEqual(cronHumanTextInEnglish);
         });
+
+        it("for every year on the last day of a month", function(){
+            var cronExp = "0 25 11 ? 1,4 6L *";
+            var cronHumanTextInEnglish = "Every year on the last Friday of January, April at 11:25 AM";
+
+            $fixture.jsCronUI('setCron', cronExp);
+
+            expect($fixture.jsCronUI('toEnglishString')).toEqual(cronHumanTextInEnglish);
+        })
     });
 
     describe("should correctly intrepret interface", function() {
